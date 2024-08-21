@@ -22,3 +22,17 @@ insert into apealStatus (name)
 values
 ('seen'), ('notseen'), ('panding'), ('cancel');
 -- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CREATE TABLE apeal (
+    id BIGSERIAL PRIMARY KEY,
+    firstname VARCHAR(500) NOT NULL,
+    lastname VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    description VARCHAR(500),
+    status INTEGER DEFAULT 1,
+    reseen DATE,
+    CONSTRAINT fk_status FOREIGN KEY (status) REFERENCES apealstatus (id),
+    CONSTRAINT check_reseen_not_null CHECK (
+        (status = 3 AND reseen IS NOT NULL) OR status != 3
+    )
+);
