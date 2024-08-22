@@ -1,7 +1,7 @@
 import multer from "multer";
 import md5 from "md5";
 import { Router } from "express";
-import { checkToken, get_id } from "../../../functions/jwtDean.js";
+import { checkToken, get_id } from "../../../functions/jwtadmin.js";
 import fs from "fs";
 
 const router = Router();
@@ -39,7 +39,7 @@ router.post("/", [checkToken, upload.single("image")], async (req, res) => {
   // if(!req.body.file.url) return res.status(400).send({error : err.message})
   try {
     let fileurl = await global.pool.query(
-      "Select profil_url from  dean where id = $1",
+      "Select profil_url from  admin where id = $1",
       [adminId]
     );
 
@@ -52,7 +52,7 @@ router.post("/", [checkToken, upload.single("image")], async (req, res) => {
   try {
     await global.pool.query(
       `
-            update dean set profil_url = $1 where id = $2;`,
+            update admin set profil_url = $1 where id = $2;`,
       ["profil_pictures/" + req.body.file.url, adminId]
     );
     return res.status(200).send({ Edited: true });

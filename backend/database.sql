@@ -29,6 +29,7 @@ CREATE TABLE apeal (
     lastname VARCHAR(500) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     description VARCHAR(500),
+	phone VARCHAR(500),
     status INTEGER DEFAULT 1,
     reseen DATE,
     CONSTRAINT fk_status FOREIGN KEY (status) REFERENCES apealstatus (id),
