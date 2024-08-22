@@ -44,9 +44,16 @@
 
 
         <n-layout class="h-full" has-sider>
-            <n-layout-sider bordered collapse-mode="width" :collapsed-width="64" :width="240" show-trigger
-                :inverted="inverted">
+            <n-layout-sider  bordered collapse-mode="width" :collapsed-width="64" :width="240" show-trigger
+                :inverted="inverted"
+                
+                :collapsed="collapsed"
+        @collapse="collapsed = true"
+        @expand="collapsed = false"
+                
+                >
                 <n-menu class="" :inverted="inverted" :collapsed-width="64" :collapsed-icon-size="22"
+                
                     :options="menuOptions" />
             </n-layout-sider>
             <n-layout>
@@ -99,7 +106,7 @@
 </template>
 
 <script setup>
-import { ref, h, onUnmounted, onMounted } from 'vue';
+import { ref, h, onUnmounted, onMounted, watch } from 'vue';
 import url from "../../base"
 import { RouterLink, useRouter } from "vue-router";
 import { useMessage } from "naive-ui";
@@ -516,6 +523,14 @@ function handleSelect(key) {
     message.info(String(key));
     console.log(key)
 }
+
+let collapsed = ref(localStorage.collapsed == "true" ? true : false);
+watch(collapsed, (collapsed,old)=>{
+    if(collapsed)
+    localStorage.setItem("collapsed", "true")
+else 
+localStorage.setItem("collapsed", "false")
+})
 </script>
 
 <style>
