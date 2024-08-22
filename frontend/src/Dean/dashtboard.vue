@@ -18,7 +18,7 @@
 
                     </n-badge>
                 </n-dropdown>
-                <n-dropdown trigger="hover" :options="options_lang" @select="changeLang">
+                <n-dropdown disabled trigger="hover" :options="options_lang" @select="changeLang">
                     <n-button>
                         <img :src="toggle == 'uz' ? '/1670868198_grizly-club-p-flag-uzbekistana-png-9.png' : '/EM7LidKw8aA.jpg'"
                             class="w-[25px]" lt="">
@@ -161,7 +161,7 @@ const handleSubmit = async () => {
             getProfil();
             return;
         }
-        if (backend.status == 401) return router.push('/admin/login');
+        if (backend.status == 401) return router.push('/login');
         if (backend.status == 400) {
             backend = await backend.json();
 
@@ -204,7 +204,7 @@ let data = ref({
 const router = useRouter();
 async function getProfil() {
  let status = await store.getProfil();
- if(status == 401) router.push('/admin/login')
+ if(status == 401) router.push('/login')
  console.log(status)   
  data.value =  store.profile;
 }
@@ -280,7 +280,7 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/login"
+                        to: "/login"
                     },
                     { default: () => "Jurnal" }),
                 key: "Jurnal",
@@ -290,7 +290,7 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/login"
+                        to: "/login"
                     },
                     { default: () => "Topshiriqlar" }),
                 key: "Topshiriqlar",
@@ -308,7 +308,7 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/login"
+                        to: "/login"
                     },
                     { default: () => "Kirish tarixi" }),
                 key: "Kirish tarixi",
@@ -319,7 +319,7 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/login"
+                        to: "/login"
                     },
                     { default: () => "Profil" }),
                 key: "Profil",
@@ -337,7 +337,7 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/login"
+                        to: "/login"
                     },
                     { default: () => "Kontrakt" }),
                 key: "kontrakt",
@@ -348,7 +348,7 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/login"
+                        to: "/login"
                     },
                     { default: () => "Kutubxona" }),
                 key: "payment_for_book",
@@ -367,7 +367,7 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/login"
+                        to: "/login"
                     },
                     { default: () => "Kutubxona" }),
                 key: ""
@@ -459,7 +459,7 @@ const options = ref([
         },
         props: {
             onClick: () => {
-                router.push('/dean/editprofil')
+                router.push('/editprofil')
             }
         }
     },
@@ -506,7 +506,7 @@ const options = ref([
         },
         props: {
             onClick: () => {
-                router.push("/dean/login")
+                router.push("/login")
             }
         }
     }

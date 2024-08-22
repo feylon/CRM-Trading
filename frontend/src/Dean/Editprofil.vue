@@ -10,7 +10,7 @@
     </div>
 
 
-    <div class="flex xl:w-[1200px] items-center flex-col">
+    <div class="flex xl:w-[1200px] xl:w-[900px] items-center flex-col ">
         <div class="justify-between w-[90%] mx-auto flex sm:flex-col md:flex-row">
             <div class="flex gap-3 w-[300px] items-center">
                 <label for="email"><span class="text-[17px] items-center font-bold">Email</span></label>

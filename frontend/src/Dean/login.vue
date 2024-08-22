@@ -112,7 +112,7 @@ async function loginfunc() {
 // await store.getProfil();
 (async()=>{await store.getProfil();})()
 console.log(store.profile);
-      router.push("/dean");
+      router.push("/");
       login.value = '';
       password.value = '';
       
