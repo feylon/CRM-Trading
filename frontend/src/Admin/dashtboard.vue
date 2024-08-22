@@ -205,7 +205,7 @@ const router = useRouter();
 async function getProfil() {
  let status = await store.getProfil();
  if(status == 401) router.push('/login')
- console.log(status)   
+    
  data.value =  store.profile;
 }
 onMounted(async () => {
@@ -250,9 +250,9 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/Add_worker"
+                        to: "/allApeals"
                     },
-                    { default: () => ('addWorker') }),
+                    { default: () => ('Murojaatlar') }),
                 key: "addWorker",
                 icon: renderIconSpan("group_add")
             },
