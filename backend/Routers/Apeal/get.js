@@ -3,7 +3,7 @@ import { checkToken } from "../../functions/jwtadmin.js";
 import Joi from "joi";
 const router = Router();
 
-router.get("/all",  async function(req, res){
+router.get("/all", checkToken, async function(req, res){
     const Schema = Joi.object(
         {
             size : Joi.number().integer().min(0).required(),
