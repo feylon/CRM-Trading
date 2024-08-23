@@ -37,9 +37,13 @@
         <td class="text-center">{{i.description}}</td>
         <td class="text-center">{{ i.statusname }}</td>
         <td class="text-center">{{ (new Date(i.created_at)).toLocaleString() }}</td>
-        <td><n-button type="tertiary" @click="editmodal(i)">
+        <td >
+          <div class="flex justify-center">
+            <n-button type="tertiary" @click="editmodal(i)">
           <i class="fas fa-pen"></i>
-    </n-button></td>
+    </n-button>
+          </div>
+        </td>
       </tr>
       
     </tbody>

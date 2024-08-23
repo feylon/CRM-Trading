@@ -61,28 +61,31 @@
 
 
     <div class="mt-4">
-        <div class="font-bold">
+        <div v-if="panding || data.status_id.id == 3" class="font-bold">
             Vaqti
         </div>
         
-        <n-date-picker v-if="data.reseen" v-model:value="data.reseen" type="date" />
+        <n-date-picker v-if="panding || data.status_id.id == 3 " v-model:value="reseen" type="date" />
 
     </div>
 
     </div>  
+    <div class="flex justify-end mt-5">
+        <n-button @click="save({status : data.status_id, id :((store.modals.editApeal.data.id)), panding : panding, reseen : reseen })">Saqlash</n-button>
+    </div>
     </div>
     
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Dean } from '../../../Pinia';
 import url from "../../../base";
-import DatePicker from 'primevue/datepicker';
 import { useRouter } from 'vue-router';
 let date = '2024-09-10'
 const router = useRouter();
 const store = Dean();
+
 const data = ref({
     firstname : '',
     lastname : '',
@@ -92,10 +95,26 @@ const data = ref({
     status_id : 0,
     reseen : 1038942000000
 });
+
+watch(
+    ()=>data,
+    (data, old)=>{
+        if(data['_value'].status_id == 3)
+        panding.value = true;
+        else
+        panding.value = false;
+
+
+    }, {deep : true}
+)
+
+
 const apeallist = ref([])
+let reseen = ref(1038942000000)
+let panding = ref(false)
 
 let getapeal = async function(){
-    let {id} = store.modals.editApeal.data
+    let id = store.modals.editApeal.data.id;
 let token = localStorage.token;
 id = new Number(id);
 let backend = await fetch(`${url}apeal/getapeal/apealstatus`, {
@@ -112,7 +131,6 @@ let backend = await fetch(`${url}apeal/getapeal/apealstatus`, {
         if (backend.status == 200) {
             backend = await backend.json();
             apeallist.value = [];
-            console.log(backend)
             backend.forEach(i =>{
                 apeallist.value.push({value : (i.id), label : i.name})
 
@@ -140,9 +158,9 @@ let backend = await fetch(`${url}apeal/getapeal/byid?id=${id}`, {
             backend = await backend.json();
             backend = backend[0]
             backend.created_at = (new Date(backend.created_at)).toLocaleString()
-            console.log(backend);
             if(backend.reseen){
-                backend.reseen = (new Date(backend.reseen)).getTime();
+                panding.value = true;
+                reseen.value = (new Date(backend.reseen)).getTime();
             }
             data.value = backend;
             
@@ -150,6 +168,23 @@ let backend = await fetch(`${url}apeal/getapeal/byid?id=${id}`, {
 };
 await getapeal();
 })
+
+
+function save(data) {
+    console.log(data);
+    const timestamp = data.reseen; 
+const date = new Date(timestamp);
+
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, '0'); 
+const day = String(date.getDate()).padStart(2, '0');
+
+data.reseen = `${year}-${month}-${day}`;
+
+console.log(data); 
+
+}
+
 
 
 </script>
