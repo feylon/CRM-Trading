@@ -37,7 +37,9 @@
         <td class="text-center">{{i.description}}</td>
         <td class="text-center">{{ i.statusname }}</td>
         <td class="text-center">{{ (new Date(i.created_at)).toLocaleString() }}</td>
-
+        <td><n-button type="tertiary" @click="editmodal(i)">
+          <i class="fas fa-pen"></i>
+    </n-button></td>
       </tr>
       
     </tbody>
@@ -94,13 +96,46 @@
 </div>
     </div>
     </div>
+
+    <!-- Modal section -->
+
+    <n-modal
+    v-model:show="store.modals.editApeal.show"
+    class="custom-card"
+    preset="card"
+    :style="{width: '600px'}"
+    :title="`${store.modals.editApeal.data.lastname} ${store.modals.editApeal.data.firstname}`"
+    :bordered="true"
+    size="huge"
+    :segmented="{content: 'soft',footer: 'soft' }"
+  >
+  <editapeals/>
+  </n-modal>
 </template>
 
 <script setup>
 import {ref, onMounted, watch} from "vue";
 import { useRouter } from "vue-router";
 import { useMessage } from "naive-ui";
-import url from "../../base/index"
+import url from "../../base/index";
+import { Dean } from "../../Pinia/index.js";
+import editapeals from "./Modals/editapeals.vue"; 
+
+
+let store = Dean();
+console.log(store.modals.editApeal)
+// modal
+
+function editmodal(data) {
+  store.modals.editApeal.show = true;  
+  store.modals.editApeal.data = data;
+  
+}
+      
+    let  showModal = ref(false);
+
+
+// *modal
 let page = ref(1);
 let message = useMessage()
 let size = ref(10);

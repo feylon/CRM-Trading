@@ -6,6 +6,18 @@ import url from "../base/index.js";
 const Dean = defineStore('counter', {
     state: () => ({
       count: 0,
+      modals : {
+        
+        editApeal : {
+          show : false,
+          data : {
+
+          }
+        }
+
+
+
+      },
       profile:{
 
       }
