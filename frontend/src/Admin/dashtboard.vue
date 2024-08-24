@@ -267,9 +267,9 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/Kundalik"
+                        to: "/Kalindar"
                     },
-                    { default: () => "Kundalik" }),
+                    { default: () => "Kalindar" }),
                 key: "issues ",
                 icon: renderIcon("fas fa-receipt")
             },

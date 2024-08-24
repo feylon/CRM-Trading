@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="overflow-x-auto custom-scroll pb-[50px]">
       <p class="text-lg">
         <span class="text-[20px] font-bold">
           Murojaatlar
@@ -275,3 +275,32 @@ watch(
 
 
 </script>
+
+<style>
+.custom-scroll {
+  /* Enables vertical scrolling */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: rgb(0, 20, 60) #eee; /* For Firefox: thumb color, track color */
+}
+
+/* Webkit Browsers (Chrome, Safari, Edge) */
+.custom-scroll::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgb(0, 20, 60); /* Background color of the track */
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar color */
+  border-radius: 10px; /* Rounded corners for the scrollbar */
+  border: 2px solid rgb(0, 20, 60); /* Space around the scrollbar */
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(0, 20, 60); /* Color when hovering over the scrollbar */
+}
+
+
+</style>

@@ -19,7 +19,7 @@ const router = createRouter({
             component : () => import ("../src/Admin/Apeal.vue")
           },
           {
-            path : "/kundalik",
+            path : "/Kalindar",
             component : () => import ("../src/Admin/Kundalik/Calendar.vue")
           }
       ],
