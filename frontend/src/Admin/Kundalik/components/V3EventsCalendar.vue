@@ -23,7 +23,7 @@
             class="hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block"
             @click="jumpToToday()"
           >
-            Today
+            Bugun
           </button>
           <span class="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
           <button
@@ -35,6 +35,7 @@
             <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
           </button>
           <Datepicker
+          
             v-model="dpDate"
             auto-apply
             close-on-scroll
@@ -42,7 +43,7 @@
           >
             <template #trigger>
               <div
-                class="ml-2 lg:ml-5 flex space-x-1 md:space-x-2 justify-around items-center border rounded-md px-2 md:px-4 py-1 md:py-1.5 cursor-pointer hover:bg-gray-200 transition-colors"
+                class="ml-2 hidden lg:ml-5 flex space-x-1 md:space-x-2 justify-around items-center border rounded-md px-2 md:px-4 py-1 md:py-1.5 cursor-pointer hover:bg-gray-200 transition-colors"
               >
                 <div>
                   <svg
@@ -70,12 +71,12 @@
           </Datepicker>
         </div>
         <div v-if="showAddBtn" class="hidden md:ml-4 md:flex md:items-center">
-          <button
+          <button v-if = 'false'
             type="button"
             :class="[
               'ml-4 rounded-md bg-' +
                 primaryColor +
-                '-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-' +
+                '-600 px-3  py-2 text-sm font-semibold text-white shadow-sm hover:bg-' +
                 primaryColor +
                 '-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-' +
                 primaryColor +
@@ -85,6 +86,9 @@
           >
             Add event
           </button>
+          <n-button>
+            Qo'shish
+          </n-button>
         </div>
         <Menu v-if="showAddBtn" as="div" class="relative ml-6 md:hidden">
           <MenuButton
