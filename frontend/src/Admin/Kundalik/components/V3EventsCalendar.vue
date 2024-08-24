@@ -372,18 +372,18 @@ const month = ref(now.getMonth());
 const day = ref(now.getDay());
 const today = now.toISOString().split("T")[0]; // Format the current date as YYYY-MM-DD
 const monthNames = [
-  "January",
-  "February",
-  "March",
+  "Yanvar",
+  "Fevral",
+  "Mart",
   "April",
   "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Iyun",
+  "Iyul",
+  "Avgust",
+  "Sentyabr",
+  "Oktyabr",
+  "Noyabr",
+  "Dekabr",
 ];
 
 // popover composable
@@ -477,6 +477,7 @@ const prevMonth = () => {
 const jumpToToday = () => {
   year.value = now.getFullYear();
   month.value = now.getMonth();
+
 };
 
 /**
