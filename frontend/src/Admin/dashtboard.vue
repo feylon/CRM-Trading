@@ -248,7 +248,7 @@ let inverted = ref(true)
 const menuOptions = [
 
     {
-        label: "s",
+        label: "Murojaatlar",
         key: "pinball-1973",
         icon: renderIconSpan("group"),
         disabled: false,
@@ -309,6 +309,7 @@ const menuOptions = [
     {
         label: "Tizim",
         key: "Tizim",
+        disabled : true,
         icon: renderIconSpan("engineering"),
         children: [
             {
@@ -338,6 +339,7 @@ const menuOptions = [
     {
         label: "To'lov",
         key: "tulov",
+        disabled : true,
         icon: renderIconSpan("payments"),
         children: [
             {
@@ -367,6 +369,7 @@ const menuOptions = [
     },
     {
         label: "Ishchi ma'lumotlari",
+        disabled : true,
         key: "student-information",
         icon: renderIconSpan("dictionary"),
         children: [
