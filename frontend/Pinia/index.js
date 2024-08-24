@@ -10,6 +10,7 @@ const Dean = defineStore('counter', {
         
         editApeal : {
           show : false,
+          loading : false,
           data : {
 
           }

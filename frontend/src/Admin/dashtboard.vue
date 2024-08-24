@@ -57,7 +57,7 @@
                     :options="menuOptions" />
             </n-layout-sider>
             <n-layout>
-                <div class="p-3 pb-[100px]">
+                <div class="p-3 pb-[100px] ">
 
                     <RouterView></RouterView>
 

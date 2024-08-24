@@ -39,7 +39,7 @@ let Schema = Joi.object({
      {
         try {
             await global.pool.query(
-                `update apeal set status = $1  where id = $2`,
+                `update apeal set status = $1, reseen = null  where id = $2`,
                 [status,  id]
             );
            return res.status(200).send({edited : true});
@@ -55,6 +55,32 @@ let Schema = Joi.object({
 
 });
 
+
+
+router.delete("/byid/:id", checkToken, async function (req, res){
+    let Schemaparams = Joi.object({
+        id : Joi.number().min(0).integer().required()
+    });
+        const {id} = req.params;
+        
+        
+            try {
+                await global.pool.query(
+                    `delete from apeal where id = $1`,
+                    [ id]
+                );
+               return res.status(200).send({edited : true});
+    
+            } catch (error) {
+                if(error.code == '23503') return res.status(400).send({error : error.detail});
+                console.log(error);
+                return;
+            }
+        
+    
+    
+        
+    });
 
 
  export default router;   

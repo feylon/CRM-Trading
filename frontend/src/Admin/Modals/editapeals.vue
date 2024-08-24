@@ -82,9 +82,17 @@ import { ref, onMounted, watch } from 'vue';
 import { Dean } from '../../../Pinia';
 import url from "../../../base";
 import { useRouter } from 'vue-router';
+import { useMessage } from 'naive-ui';
+
+
+let message = useMessage();
 let date = '2024-09-10'
 const router = useRouter();
 const store = Dean();
+
+const today = new Date();  // Gets today's date and time
+let timestamp = today.getTime();
+
 
 const data = ref({
     firstname : '',
@@ -93,7 +101,7 @@ const data = ref({
     created_at : '',
     description : '',
     status_id : 0,
-    reseen : 1038942000000
+    reseen : timestamp
 });
 
 watch(
@@ -110,7 +118,7 @@ watch(
 
 
 const apeallist = ref([])
-let reseen = ref(1038942000000)
+let reseen = ref(timestamp)
 let panding = ref(false)
 
 let getapeal = async function(){
@@ -170,8 +178,7 @@ await getapeal();
 })
 
 
-function save(data) {
-    console.log(data);
+async function save(data) {
     const timestamp = data.reseen; 
 const date = new Date(timestamp);
 
@@ -180,9 +187,70 @@ const month = String(date.getMonth() + 1).padStart(2, '0');
 const day = String(date.getDate()).padStart(2, '0');
 
 data.reseen = `${year}-${month}-${day}`;
+let token = localStorage.token;
+if(!data.panding){
+    const { status, id} = data;
+    try {
+        let backend = await fetch(`${url}apeal/edit/byid/${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                '-x-token': token
+            },
+            body :JSON.stringify({
+                status 
+            })
 
-console.log(data); 
+        });
+        if(backend.status == 200){
+            message.success("Ma'lumotlar muvaqiyatli saqlandi");  
+  store.modals.editApeal.show = false;  
+  store.modals.editApeal.data = {};
+  store.modals.editApeal.loading = true;
 
+            return
+        }
+        if (backend.status == 401) {
+    return router.push('/login')
+}
+    } catch (error) {
+        
+    }
+
+}
+else{
+    const { status, id, reseen} = data;
+    try {
+        let backend = await fetch(`${url}apeal/edit/byid/${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                '-x-token': token
+            },
+            body :JSON.stringify({
+                status , reseen
+            })
+
+        });
+        if(backend.status == 200){
+            message.success("Ma'lumotlar muvaqiyatli saqlandi");  
+  store.modals.editApeal.show = false;  
+  store.modals.editApeal.data = {};
+  store.modals.editApeal.loading = true;
+            return
+        }
+        if (backend.status == 401) {
+    return router.push('/login')
+}
+    if(backend.status == 400){
+        backend = await backend.json();
+        message.error(backend.error)
+    }
+    } catch (error) {
+        
+    }
+
+}
 }
 
 

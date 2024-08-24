@@ -8,7 +8,7 @@
         </p>
 <div class="mx-auto select-auto mt-5 w-full lg:w-[1200px] items-center gap-4 flex flex-col">
 
-    <div class="container">
+    <div class="container overflow-x-clip">
 
       <n-table v-if="!loading":bordered="false" :single-line="false">
     <thead>
@@ -26,13 +26,18 @@
         <th class="flex justify-center">Tasnifi</th>
         <th class="text-center"><div class="text-center">Holati</div></th>
         <th class="text-center"><div class="text-center">Vaqti</div></th>
-        <th>####</th>
+        <th class="text-center">Tahrirlash</th>
+        <th class="text-center">Qayta ko'rish</th>
+        <th class="text-center "><div class="text-red-600">O'chirish</div> </th>
+
+
+
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(i, j) in data" :key="new Number(i.id)">
+      <tr v-for="(i, j) in data" class="bg-red-600"  :key="new Number(i.id)">
         <td>{{++ j  + (page - 1) * size }}</td>
-        <td class="text-justify ps-4 font-bold">{{i.lastname}} {{i.firstname}}</td>
+        <td class="text-justify ps-4 font-bold"><span :class="i.status == 4 ? 'line-through text-red-700' : ''">{{i.lastname}} {{i.firstname}}</span> </td>
         <td class="text-center select-text">{{ i.phone }}</td>
         <td class="text-center">{{i.description}}</td>
         <td class="text-center">{{ i.statusname }}</td>
@@ -44,6 +49,22 @@
     </n-button>
           </div>
         </td>
+
+          <td v-if="i.reseen">
+            {{ (new Date(i.reseen)).toLocaleString() }}
+
+            
+
+          </td>
+          <td v-else>Mavjud emas</td>
+          <td >
+          <div class="flex justify-center">
+            <n-button type="error" @click="deletemodal = true;deleteitem = i.id; deletecontent = `${i.lastname} ${i.firstname}dam kelgan taklifni o'chirasizmi ?`">
+              <i class="far fa-trash-can"></i>
+    </n-button>
+          </div>
+        </td>
+
       </tr>
       
     </tbody>
@@ -115,6 +136,21 @@
   >
   <editapeals/>
   </n-modal>
+
+
+  <n-modal
+    v-model:show="deletemodal"
+    preset="dialog"
+    title="O'chirish"
+    :content="deletecontent"
+    positive-text="Ha"
+    negative-text="Bekor qilindi"
+    @positive-click="deletedata"
+    @negative-click="cancelCallback"
+  />
+
+
+
 </template>
 
 <script setup>
@@ -135,8 +171,45 @@ function editmodal(data) {
   store.modals.editApeal.data = data;
   
 }
-      
-    let  showModal = ref(false);
+     let deletecontent = ref('') 
+    let deletemodal = ref(false);
+    let deleteitem = ref(null);
+
+    let deletedata = async function (){
+      console.log(deleteitem.value);
+      let token = localStorage.token;
+      try {
+        let backend = await fetch(`${url}apeal/edit/byid/${deleteitem.value}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                '-x-token': token
+            }
+
+        });
+        if(backend.status == 200){
+            message.success("Ma'lumot o'chirilid");  
+            
+  callbackend(page.value); 
+  return; 
+        }
+        if (backend.status == 401) {
+    return router.push('/login')
+}
+    if(backend.status == 400){
+        backend = await backend.json();
+        message.error(backend.error)
+    }
+    } catch (error) {
+     console.log(error)   
+    }
+
+    } 
+
+    let cancelCallback = function (){
+
+    }
+
 
 
 // *modal
@@ -189,6 +262,21 @@ let callbackend = async (page)=>{
 onMounted(async () => {
   callbackend(1); 
 });
+
+watch(
+    ()=>store.modals.editApeal.loading,
+    (data, old)=>{
+      if(data) {
+  callbackend(page.value); 
+
+      }
+
+
+    }, {deep : true}
+);
+
+
+
 </script>
 
 <style lang="scss" scoped>
