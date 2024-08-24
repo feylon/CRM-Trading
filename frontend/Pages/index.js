@@ -17,8 +17,11 @@ const router = createRouter({
           {
             path : "/allApeals",
             component : () => import ("../src/Admin/Apeal.vue")
+          },
+          {
+            path : "/kundalik",
+            component : () => import ("../src/Admin/Kundalik/App.vue")
           }
-        
       ],
       
     },

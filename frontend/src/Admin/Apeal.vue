@@ -44,7 +44,7 @@
             </thead>
             <tbody>
               <tr v-for="(i, j) in data" class="bg-red-600" :key="new Number(i.id)">
-                <td>{{+ + j + (page - 1) * size }}</td>
+                <td>{{( (j + 1) + (page - 1) * size ) }}</td>
                 <td class="text-justify ps-4 font-bold"><span
                     :class="i.status == 4 ? 'line-through text-red-700' : ''">{{ i.lastname }} {{ i.firstname }}</span>
                 </td>

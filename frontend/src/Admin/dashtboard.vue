@@ -267,9 +267,9 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/dean/issues"
+                        to: "/Kundalik"
                     },
-                    { default: () => "Davomat olish" }),
+                    { default: () => "Kundalik" }),
                 key: "issues ",
                 icon: renderIcon("fas fa-receipt")
             },
@@ -277,7 +277,7 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/admin/issuesTable"
+                        to: "/kundalik"
                     },
                     { default: () => "Davomat jadvali" }),
                 key: "Davomat",
