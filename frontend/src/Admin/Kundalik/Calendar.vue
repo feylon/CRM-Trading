@@ -20,7 +20,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span><span class="font-medium">Your Time: </span>{{ props.eventDialogData.time.start }}
+                      <span><span class="font-medium">Boshlanish vaqti: </span>{{ props.eventDialogData.time.start }}
                       </span>
                     </h6>
 
@@ -31,7 +31,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span><span class="font-medium">Their Time: </span>{{ props.eventDialogData.time.start }}
+                      <span><span class="font-medium">Tugash vaqti: </span>{{ props.eventDialogData.time.start }}
                       </span>
                     </h6>
 
@@ -62,7 +62,7 @@
                   </div>
 
                   <div v-if="props.eventDialogData.image != null" class="w-full flex justify-center mt-5">
-                    <img :src="props.eventDialogData.image" alt="launch image" class="rounded-full h-36 w-36" />
+                    <!-- <img :src="props.eventDialogData.image" alt="launch image" class="rounded-full h-36 w-36" /> -->
                   </div>
 
                   <div class="w-full text-xs font-medium text-gray-700 mt-5">
@@ -120,7 +120,7 @@ const events = ref([
     time: { start: "2024-06-11T02:00", end: "2024-06-11T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -131,7 +131,7 @@ const events = ref([
     time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
     background: "teal",
@@ -143,7 +143,7 @@ const events = ref([
     time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -154,7 +154,7 @@ const events = ref([
     time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -165,7 +165,7 @@ const events = ref([
     time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -176,7 +176,7 @@ const events = ref([
     time: { start: "2024-06-06T12:00", end: "2024-06-06T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -187,7 +187,7 @@ const events = ref([
     time: { start: "2024-06-19T12:00", end: "2024-06-19T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -198,7 +198,7 @@ const events = ref([
     time: { start: "2024-06-19T12:00", end: "2024-06-19T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -209,7 +209,7 @@ const events = ref([
     time: { start: "2024-06-15T12:00", end: "2024-06-15T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -220,7 +220,7 @@ const events = ref([
     time: { start: "2024-06-15T12:00", end: "2024-06-15T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
@@ -231,9 +231,11 @@ const events = ref([
     time: { start: "2024-06-02T12:00", end: "2024-06-02T14:00" },
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "test-img.png",
+    
     tags: "#fun #nightout #dance #veterantime",
     location: "At the base",
   },
 ]);
+
+
 </script>

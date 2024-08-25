@@ -134,25 +134,25 @@
         class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none"
       >
         <div class="bg-white py-2">
-          S<span class="sr-only sm:not-sr-only">un</span>
+          Y<span class="sr-only sm:not-sr-only">ak</span>
         </div>
         <div class="bg-white py-2">
-          M<span class="sr-only sm:not-sr-only">on</span>
+          D<span class="sr-only sm:not-sr-only">u</span>
         </div>
         <div class="bg-white py-2">
-          T<span class="sr-only sm:not-sr-only">ue</span>
+          S<span class="sr-only sm:not-sr-only">e</span>
         </div>
         <div class="bg-white py-2">
-          W<span class="sr-only sm:not-sr-only">ed</span>
+          C<span class="sr-only sm:not-sr-only">ohr</span>
         </div>
         <div class="bg-white py-2">
-          T<span class="sr-only sm:not-sr-only">hu</span>
+          P<span class="sr-only sm:not-sr-only">ay</span>
         </div>
         <div class="bg-white py-2">
-          F<span class="sr-only sm:not-sr-only">ri</span>
+          J<span class="sr-only sm:not-sr-only">u</span>
         </div>
         <div class="bg-white py-2">
-          S<span class="sr-only sm:not-sr-only">at</span>
+          S<span class="sr-only sm:not-sr-only">h</span>
         </div>
       </div>
       <div
@@ -385,7 +385,7 @@ const monthNames = [
   "Noyabr",
   "Dekabr",
 ];
-
+watch(month, (month)=>console.log(month, year))
 // popover composable
 const { popoverShow, todaysEvent, togglePopover } = usePopover(popoverRef);
 

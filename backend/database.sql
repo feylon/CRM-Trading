@@ -37,3 +37,15 @@ CREATE TABLE apeal (
         (status = 3 AND reseen IS NOT NULL) OR status != 3
     )
 );
+-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CREATE TABLE calendar (
+    id SERIAL PRIMARY KEY,
+    url VARCHAR(255),
+    title VARCHAR(255),
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    description TEXT,
+    image VARCHAR(255),
+    tags VARCHAR(255),
+    location VARCHAR(255)
+);
