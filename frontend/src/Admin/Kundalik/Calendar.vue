@@ -90,7 +90,7 @@
                         </svg>
                         <span>Yopish</span>
                       </button> -->
-                      <n-button type='error' strong>O'chirish</n-button>
+                      <n-button type='error' @click="showModal = true; deleteitemtext = props.eventDialogData.title; deleteitem = props.eventDialogData.id" strong>O'chirish</n-button>
                       <a :href="props.eventDialogData.url"
                         class="bg-green-600 rounded-md py-1 md:py-2 px-5  shadow-md hover:bg-green-700 transition-all">
                         <span class="text-xs md:text-sm font-medium text-white">Linkni o'qish</span>
@@ -106,13 +106,29 @@
     </div>
   </div>
   <div class="h-[500px]"></div>
+  <n-modal
+    v-model:show="showModal"
+    preset="dialog"
+    title="O'chirish"
+    :content="`''${deleteitemtext}'' element o'chirilsinmi ?` "
+    positive-text="O'chirish"
+    negative-text="Bekor qilish"
+    @positive-click="submitCallback"
+    @negative-click="cancelCallback"
+  />
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
 import V3EventsCalendar from "./components/V3EventsCalendar.vue";
 import url from "../../../base"
-
+import { useRouter } from "vue-router";
+import { useMessage } from "naive-ui";
+const message = useMessage();
 // all events data
+const router = useRouter();
+let showModal = ref(false);
+let deleteitemtext = ref('');
+let deleteitem = ref(null);
 const events = ref(null)
   // [
   // {
@@ -250,7 +266,7 @@ const events = ref(null)
   // },
 // ]);
 
-onMounted(async ()=>{
+let callbackend = async function(){
   const token = localStorage.token;
 
 let backend = await fetch(`${url}calendar/getcalendar`,
@@ -264,7 +280,49 @@ let backend = await fetch(`${url}calendar/getcalendar`,
     );
     if (backend.status == 200) {
       backend = await backend.json();
-      console.log(backend);
       events.value = backend;
-}})
+}
+  if(backend.status == 401) router.push('/login');
+}
+
+onMounted(async ()=>{await callbackend()});
+
+const submitCallback = async function(){
+  console.log(deleteitem.value);
+  deletedata();
+}
+
+const cancelCallback = async function(){
+  
+}
+let deletedata = async function () {
+  let token = localStorage.token;
+  try {
+    let backend = await fetch(`${url}calendar/delete/${deleteitem.value}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        '-x-token': token
+      }
+
+    });
+    if (backend.status == 200) {
+      message.success("Ma'lumot o'chirildi");
+      router.go(0);
+
+      // callbackend(page.value);
+      return;
+    }
+    if (backend.status == 401) {
+      return router.push('/login')
+    }
+    if (backend.status == 400) {
+      backend = await backend.json();
+      message.error(backend.error)
+    }
+  } catch (error) {
+  }
+
+}
+
 </script>

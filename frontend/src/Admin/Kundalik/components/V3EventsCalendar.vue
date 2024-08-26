@@ -385,7 +385,7 @@ const monthNames = [
   "Noyabr",
   "Dekabr",
 ];
-watch(month, (month)=>console.log(month, year))
+// watch(month, (month)=>console.log(month, year))
 // popover composable
 const { popoverShow, todaysEvent, togglePopover } = usePopover(popoverRef);
 
