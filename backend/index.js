@@ -9,6 +9,7 @@ dotenv.config();
 // import files
 import Admin from "./Routers/admin/index.js";
 import Apeal from "./Routers/Apeal/index.js"
+import Calendar from "./Routers/Calendar/index.js";
 
 import pool from "./functions/datatabase.js";
 global.pool = pool;
@@ -79,7 +80,10 @@ Apeal.forEach(element =>{
 app.use(`/apeal${element.path}`, element.route);   
 });
 
-
+Calendar.forEach(element =>{
+  app.use(`/calendar${element.path}`, element.route);   
+  });
+  
 
 
 // another routers
