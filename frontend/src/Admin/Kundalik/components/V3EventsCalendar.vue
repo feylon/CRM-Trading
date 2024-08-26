@@ -143,7 +143,7 @@
           S<span class="sr-only sm:not-sr-only">e</span>
         </div>
         <div class="bg-white py-2">
-          C<span class="sr-only sm:not-sr-only">ohr</span>
+          C<span class="sr-only sm:not-sr-only">hor</span>
         </div>
         <div class="bg-white py-2">
           P<span class="sr-only sm:not-sr-only">ay</span>

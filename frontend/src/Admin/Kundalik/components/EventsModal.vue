@@ -60,7 +60,7 @@
               </div>
               <div>
                 <h5 class="text-xs md:text-sm text-left">
-                  {{ events.length + " Total Events" }}
+                  {{ " Hammasi " + events.length + " ta"   }}
                 </h5>
               </div>
             </div>
@@ -115,7 +115,7 @@
         <slot name="footer">
           <div class="flex space-x-1 items-center">
             <div>
-              <h3 class="text-sm md:text-base font-medium">close</h3>
+              <h3 class="text-sm md:text-base font-medium">Yopish</h3>
             </div>
             <div
               class="font-semibold hover:rotate-90 transition-all duration-700 cursor-pointer"

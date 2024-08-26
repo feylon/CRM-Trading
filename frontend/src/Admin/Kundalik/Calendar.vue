@@ -2,11 +2,21 @@
   <div class="h-screen w-full flex flex-col items-center justify-center">
     <div class="w-11/12 lg:w-9/12 h-full">
       <div class="w-full h-full">
-        <V3EventsCalendar :events="events" :primary-color="'lime'">
+        <V3EventsCalendar v-if="events" :events="events" :primary-color="'lime'">
           <template #eventDialog="props">
             <div v-if="props.eventDialogData && props.eventDialogData.title"
-              class="p-4 flex justify-center border border-gray-100 rounded-md">
+              class="p-4 flex justify-center border relative border-gray-100 rounded-md">
               <div>
+                <div class="top-0 right-0 absolute">
+                  <button
+                        class="close-flyout flex items-center space-x-2 bg-red-500 py-1 px-1 text-xs hover:text-sm rounded-md text-white transition-all"
+                        @click="props.closeEventDialog">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                          stroke="currentColor" class="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                </div>
                 <div class="text-sm md:text-base font-bold text-gray-700 text-center">
                   {{ props.eventDialogData.title }}
                 </div>
@@ -71,7 +81,7 @@
 
                   <div class="w-full flex justify-center mt-6">
                     <div class="w-full flex items-center justify-between">
-                      <button
+                      <!-- <button
                         class="close-flyout flex items-center space-x-2 bg-gray-100 py-1 px-3 text-xs hover:text-sm rounded-md text-gray-700 transition-all"
                         @click="props.closeEventDialog">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -79,10 +89,11 @@
                           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                         <span>Yopish</span>
-                      </button>
+                      </button> -->
+                      <n-button type='error' strong>O'chirish</n-button>
                       <a :href="props.eventDialogData.url"
                         class="bg-green-600 rounded-md py-1 md:py-2 px-5  shadow-md hover:bg-green-700 transition-all">
-                        <span class="text-xs md:text-sm font-medium text-white">See more</span>
+                        <span class="text-xs md:text-sm font-medium text-white">Linkni o'qish</span>
                       </a>
                     </div>
                   </div>
@@ -97,145 +108,163 @@
   <div class="h-[500px]"></div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import V3EventsCalendar from "./components/V3EventsCalendar.vue";
+import url from "../../../base"
 
 // all events data
-const events = ref([
-  {
-    id: 1,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 11",
-    time: { start: "2024-08-27T12:00", end: "2024-08-29T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    image: "https://i.ytimg.com/vi/D_zVKIC-xes/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AHUBoAC4AOKAgwIABABGHggNyh_MA8=&rs=AOn4CLAaVt5g4iCbB_gWNfVkgqCA6JmnIQ",
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 2,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 2",
-    time: { start: "2024-06-11T02:00", end: "2024-06-11T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+const events = ref(null)
+  // [
+  // {
+  //   id: 1,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 11",
+  //   time: { start: "2024-08-27T12:00", end: "2024-08-29T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   image: "https://i.ytimg.com/vi/D_zVKIC-xes/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AHUBoAC4AOKAgwIABABGHggNyh_MA8=&rs=AOn4CLAaVt5g4iCbB_gWNfVkgqCA6JmnIQ",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 2,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 2",
+  //   time: { start: "2024-06-11T02:00", end: "2024-06-11T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 3,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 3",
-    time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 3,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 3",
+  //   time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-    background: "teal",
-  },
-  {
-    id: 4,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 4",
-    time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  //   background: "teal",
+  // },
+  // {
+  //   id: 4,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 4",
+  //   time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 5,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 5",
-    time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 5,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 5",
+  //   time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 6,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 6",
-    time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 6,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 6",
+  //   time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 7,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 7",
-    time: { start: "2024-06-06T12:00", end: "2024-06-06T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 7,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 7",
+  //   time: { start: "2024-06-06T12:00", end: "2024-06-06T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 8,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 8",
-    time: { start: "2024-06-19T12:00", end: "2024-06-19T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 8,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 8",
+  //   time: { start: "2024-06-19T12:00", end: "2024-06-19T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 9,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 9",
-    time: { start: "2024-06-19T12:00", end: "2024-06-19T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 9,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 9",
+  //   time: { start: "2024-06-19T12:00", end: "2024-06-19T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 10,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 10",
-    time: { start: "2024-06-15T12:00", end: "2024-06-15T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 10,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 10",
+  //   time: { start: "2024-06-15T12:00", end: "2024-06-15T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 11,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 11",
-    time: { start: "2024-06-15T12:00", end: "2024-06-15T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 11,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 11",
+  //   time: { start: "2024-06-15T12:00", end: "2024-06-15T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-  {
-    id: 12,
-    url: "https://github.com/feylon",
-    title: "Dummy Event Name 12",
-    time: { start: "2024-06-02T12:00", end: "2024-06-02T14:00" },
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+  // {
+  //   id: 12,
+  //   url: "https://github.com/feylon",
+  //   title: "Dummy Event Name 12",
+  //   time: { start: "2024-06-02T12:00", end: "2024-06-02T14:00" },
+  //   description:
+  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
     
-    tags: "#fun #nightout #dance #veterantime",
-    location: "At the base",
-  },
-]);
+  //   tags: "#fun #nightout #dance #veterantime",
+  //   location: "At the base",
+  // },
+// ]);
 
+onMounted(async ()=>{
+  const token = localStorage.token;
 
+let backend = await fetch(`${url}calendar/getcalendar`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          '-x-token': token
+        }
+      }
+    );
+    if (backend.status == 200) {
+      backend = await backend.json();
+      console.log(backend);
+      events.value = backend;
+}})
 </script>
