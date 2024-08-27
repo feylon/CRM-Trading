@@ -86,7 +86,7 @@
           >
             Add event
           </button>
-          <n-button>
+          <n-button @click="store.modals.addcalendar.show = true">
             Qo'shish
           </n-button>
         </div>
@@ -324,6 +324,18 @@
       />
     </div>
   </div>
+
+<!-- modal -->
+<n-modal v-model:show="store.modals.addcalendar.show" preset="dialog" title="Dialog">
+    <template #header>
+      <div>Qo'shish</div>
+    </template>
+    <addcalendar/>
+    <!-- <template #action>
+      <div>action</div>
+    </template> -->
+  </n-modal>
+
 </template>
 
 <script setup>
@@ -338,7 +350,11 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "../../../../src/style.css";
 import { usePopover } from "../composables/popover";
 import Modal from "./EventsModal.vue";
+import { Dean } from "../../../../Pinia";
 
+import addcalendar from "../../Modals/addcalendar.vue";
+const store = Dean();
+console.log(store.modals.addcalendar.show)  
 /**************************************
  * PROPS
  * ************************************

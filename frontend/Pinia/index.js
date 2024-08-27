@@ -1,96 +1,69 @@
-import { defineStore } from 'pinia';
-import { useRouter } from 'vue-router';
+import { defineStore } from "pinia";
+import { useRouter } from "vue-router";
 import url from "../base/index.js";
 
-
-const Dean = defineStore('counter', {
-    state: () => ({
-      count: 0,
-      modals : {
-        
-        editApeal : {
-          show : false,
-          loading : false,
-          data : {
-
-          }
-        }
-
-
-
+const Dean = defineStore("counter", {
+  state: () => ({
+    count: 0,
+    modals: {
+      editApeal: {
+        show: false,
+        loading: false,
+        data: {},
       },
-      profile:{
-
-      }
-    }),
-    getters: {
-      doubleCount: (state) => {state.count * 2; console.log(1)},
+      addcalendar: {
+        show: false
+      },
     },
-    actions: {
-      increment() {
-        this.count++;
-      },
-      async getProfil(){
+    profile: {},
+  }),
+  getters: {
+    doubleCount: (state) => {
+      state.count * 2;
+      console.log(1);
+    },
+  },
+  actions: {
+    increment() {
+      this.count++;
+    },
+    async getProfil() {
+      let token = localStorage.token;
+      let backend = await fetch(`${url}admin/getprofile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "-x-token": token,
+        },
+      });
 
-        let token = localStorage.token;
-        let backend = await fetch(`${url}admin/getprofile`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-                '-x-token': token
-            }
-        });
-    
-        if (backend.status == 401) {
-          //  window.location.href = '/dean/login';
-           return  401;}
-        if (backend.status == 200) {
-            backend = await backend.json();
-            this.profile = backend;
-            console.log(backend)
-
-        }
-      },
-      async getCalendar(){
-
-        let token = localStorage.token;
-        let backend = await fetch(`${url}admin/getprofile`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-                '-x-token': token
-            }
-        });
-    
-        if (backend.status == 401) {
-          //  window.location.href = '/dean/login';
-           return  401;}
-        if (backend.status == 200) {
-            backend = await backend.json();
-            this.profile = backend;
-            console.log(backend)
-
-        }
+      if (backend.status == 401) {
+        //  window.location.href = '/dean/login';
+        return 401;
+      }
+      if (backend.status == 200) {
+        backend = await backend.json();
+        this.profile = backend;
+        console.log(backend);
       }
     },
-  });
+  },
+});
 
-
-
-
-
-
-  const Student = defineStore('counter11', {
-    state: () => ({
-      count: 1,
-    }),
-    getters: {
-      doubleCount: (state) => {state.count * 2; console.log(1)},
+const Student = defineStore("counter11", {
+  state: () => ({
+    count: 1,
+  }),
+  getters: {
+    doubleCount: (state) => {
+      state.count * 2;
+      console.log(1);
     },
-    actions: {
-      increment() {
-        this.count++;
-      },
+  },
+  actions: {
+    increment() {
+      this.count++;
     },
-  }); 
-export  {Dean, Student}; 
+  },
+});
+export { Dean, Student };
