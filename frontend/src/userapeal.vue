@@ -65,7 +65,7 @@ console.log(url)
 <style >
 .tradingback{
     background-image: url('./tradingback.png');
-    background-size: cover;
+    background-size: cover; 
 }
 
 </style>

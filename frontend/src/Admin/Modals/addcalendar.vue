@@ -1,4 +1,10 @@
 <template>
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
     <n-form ref="formRef" inline :label-width="80" :model="formValue" :rules="rules" :size="size"
         class="flex flex-wrap justify-center">
 
@@ -48,7 +54,11 @@
         <div class="flex justify-end">
 
             <n-form-item>
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
                 <n-button @click="handleValidateClick">
                     Qo'shish
                 </n-button>
@@ -56,6 +66,10 @@
         </div>
     </n-form>
 
+<<<<<<< HEAD
+=======
+    <pre>{{ JSON.stringify(formValue, null, 2) }}</pre>
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
 </template>
 
 <script setup>
@@ -71,9 +85,17 @@ const router = useRouter();
 const store = Dean();
 
 
+<<<<<<< HEAD
 
 const formRef = ref(null);
 
+=======
+// setTimeout(() => {
+//     store.modals.addcalendar.show = false;
+// }, 3000);
+const formRef = ref(null);
+
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
 const size = ref('small');
 const formValue = ref({
 
@@ -116,20 +138,32 @@ const rules = {
         message: "Descriptionni kiriting"
     },
     tags: {
+<<<<<<< HEAD
 
+=======
+        // type: "number",
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
         required: false,
         trigger: ["blur", "change"],
         message: "Taglarni kiriting"
     },
     location: {
+<<<<<<< HEAD
 
+=======
+        // type: "number",
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
         required: false,
         trigger: ["blur", "change"],
         message: "Joylasuhvni kiriting"
     },
 
     url: {
+<<<<<<< HEAD
 
+=======
+        // type: "number",
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
         required: false,
         trigger: ["blur", "change"],
         message: "Havolani kiriting"
@@ -149,7 +183,11 @@ const handleValidateClick = async (e) => {
                     }
 
                 }
+<<<<<<< HEAD
                 if (data.url) data.url = `https://${data.url}`;
+=======
+                console.log(data)
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
 
                 let backend = await fetch(`${url}calendar/addcalendar`, {
                     method: "POST",
@@ -160,6 +198,10 @@ const handleValidateClick = async (e) => {
                     body: JSON.stringify(data)
                 });
 
+<<<<<<< HEAD
+=======
+                console.log(backend.status);
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
                 if (backend.status == 400) {
                     backend = await backend.json();
                     message.error(backend.error);
@@ -177,22 +219,35 @@ const handleValidateClick = async (e) => {
                 }
 
             } catch (error) {
+<<<<<<< HEAD
 
             }
         } else {
 
             message.error('Formani to`ldiring');
+=======
+                console.log(error)
+            }
+        } else {
+            console.log(errors);
+            message.error('Invalid');
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
         }
     });
 };
 
 
 let spacekey = function () {
+<<<<<<< HEAD
 
+=======
+    console.log('space');
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
     if (formValue.value.tags) {
         formValue.value.tags = formValue.value.tags.trim();
 
         formValue.value.tags = formValue.value.tags
+<<<<<<< HEAD
             .split(' ')
             .map(word => `#${word}`)
             .join(' ') + ' ';
@@ -201,9 +256,24 @@ let spacekey = function () {
 
     }
 
+=======
+            .split(' ')        // Split the string by spaces into an array
+            .map(word => `#${word}`)  // Add '#' to each word
+            .join(' ') + ' ';
+        formValue.value.tags = formValue.value.tags.replace(/#{2,}/g, '#');
+
+        // Join the array back into a string with spaces
+    }
+    console.log(formValue.value.tags);
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
 
 
 
 }
 
 </script>
+<<<<<<< HEAD
+=======
+
+<style lang="scss" scoped></style>
+>>>>>>> 0e2964ed275a97c2f0cf0b22b2ce68a888363237
