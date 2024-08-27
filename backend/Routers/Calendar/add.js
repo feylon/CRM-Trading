@@ -4,7 +4,7 @@ import { Router } from "express";
 const router = Router();
 
 function getCustomTimestamp(timestamp) {
-  const date = new Date(timestamp * 1000);
+  const date = new Date(timestamp );
 
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -17,6 +17,7 @@ function getCustomTimestamp(timestamp) {
 }
 
 router.post("/", checkToken, async function (req, res) {
+   console.log(req.body) 
   const Schema = Joi.object({
     url: Joi.string().min(3).max(255),
     title: Joi.string().min(3).max(255).required(),
@@ -38,15 +39,15 @@ router.post("/", checkToken, async function (req, res) {
   //   if (!location) location = "";
 
   if (start_time >= end_time)
-    return res.status(400).send({ error: "Noto'g'ri mutonosiblik" });
-  if (start_time > 1767211261)
-    return res.status(400).send({ error: "Noto'g'ri mutonosiblik" });
-  if (end_time > 1767211261)
-    return res.status(400).send({ error: "Noto'g'ri mutonosiblik" });
+    return res.status(400).send({ error: "Noto'g'ri mutonosiblik1" });
+  // if (start_time < 1767211261)
+  //   return res.status(400).send({ error: "Noto'g'ri mutonosiblik2" });
+  // if (end_time > 1767211261)
+  //   return res.status(400).send({ error: "Noto'g'ri mutonosiblik3" });
   if (end_time < 1724529661)
-    return res.status(400).send({ error: "Noto'g'ri mutonosiblik" });
+    return res.status(400).send({ error: "Noto'g'ri mutonosiblik4" });
   if (start_time < 1724529661)
-    return res.status(400).send({ error: "Noto'g'ri mutonosiblik" });
+    return res.status(400).send({ error: "Noto'g'ri mutonosiblik5" });
 
   start_time = getCustomTimestamp(start_time);
   end_time = getCustomTimestamp(end_time);

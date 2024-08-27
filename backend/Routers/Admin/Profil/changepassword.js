@@ -37,7 +37,7 @@ router.post("/", checkToken, async function (req, res) {
       [adminId]
     );
     let isTrue = await check(oldpassword, data.rows[0].password);
-    if (!isTrue) return res.status(400).send({ error: "Error password" });
+    if (!isTrue) return res.status(400).send({ error: "Eski parol xato" });
     change_password = await hash(newpassword);
   } catch (error) {
     console.log(error);

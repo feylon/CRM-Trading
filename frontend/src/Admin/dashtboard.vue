@@ -5,7 +5,7 @@
                 <span
                     class="me-5 flex justify-center w-[240px]  block absolute text-white select-none text-[28px] flex items-center gap-1 top-[10px] left-[10px] font-semibold">
                     <span class="text-[13px] rotate-45 duration-100"><i class="fas fa-square"></i></span>
-                    {{ ('Airleet') }}
+                    {{ ('Aileet') }}
                 </span>
             </div>
 
@@ -273,67 +273,38 @@ const menuOptions = [
                 key: "issues ",
                 icon: renderIcon("fas fa-receipt")
             },
-            {
-                label: () => h(
-                    RouterLink,
-                    {
-                        to: "/kundalik"
-                    },
-                    { default: () => "Davomat jadvali" }),
-                key: "Davomat",
-                icon: renderIcon("far fa-calendar-xmark")
-            },
-            {
-                label: () => h(
-                    RouterLink,
-                    {
-                        to: "/login"
-                    },
-                    { default: () => "Jurnal" }),
-                key: "Jurnal",
-                icon: renderIconSpan("book_5")
-            },
-            {
-                label: () => h(
-                    RouterLink,
-                    {
-                        to: "/login"
-                    },
-                    { default: () => "Topshiriqlar" }),
-                key: "Topshiriqlar",
-                icon: renderIconSpan("contract_edit")
-
-            }
+        
+            
         ]
     },
     {
         label: "Tizim",
         key: "Tizim",
-        disabled : true,
+        
         icon: renderIconSpan("engineering"),
         children: [
-            {
+        {
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/login"
+                        to: "/editprofil"
                     },
-                    { default: () => "Kirish tarixi" }),
-                key: "Kirish tarixi",
-                icon: renderIconSpan("manage_history"),
-
+                    { default: () => "Profilni tahrirlash" }),
+                key: "Davomat",
+                icon: renderIcon("fas fa-user-pen")
             },
+
             {
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/login"
+                        to: "/changepassword"
                     },
-                    { default: () => "Profil" }),
-                key: "Profil",
-                icon: renderIconSpan("account_circle"),
-
+                    { default: () => "Parolni almashtirish" }),
+                key: "changepassword",
+                icon: renderIcon("fas fa-lock")
             }
+            
         ]
     },
     {

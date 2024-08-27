@@ -86,9 +86,15 @@
           >
             Add event
           </button>
-          <n-button @click="store.modals.addcalendar.show = true">
+          <n-popover trigger="hover">
+    <template #trigger>
+      <n-button @click="store.modals.addcalendar.show = true">
             Qo'shish
           </n-button>
+    </template>
+    <span>Yagi element qo'shish</span>
+  </n-popover>
+          
         </div>
         <Menu v-if="showAddBtn" as="div" class="relative ml-6 md:hidden">
           <MenuButton
@@ -326,9 +332,23 @@
   </div>
 
 <!-- modal -->
-<n-modal v-model:show="store.modals.addcalendar.show" preset="dialog" title="Dialog">
+<n-modal v-model:show="store.modals.addcalendar.show" 
+class="custom-card"
+    preset="card"
+    :style="{
+        width: '600px'
+      }"
+    title="Yangi qo'shish"
+    :bordered="false"
+    size="huge"
+    :segmented="{
+        content: 'soft',
+        footer: 'soft'
+      }"
+
+>
     <template #header>
-      <div>Qo'shish</div>
+      <div>Qo'shish1</div>
     </template>
     <addcalendar/>
     <!-- <template #action>

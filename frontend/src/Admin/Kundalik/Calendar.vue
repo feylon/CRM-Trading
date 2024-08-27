@@ -92,6 +92,7 @@
                       </button> -->
                       <n-button type='error' @click="showModal = true; deleteitemtext = props.eventDialogData.title; deleteitem = props.eventDialogData.id" strong>O'chirish</n-button>
                       <a :href="props.eventDialogData.url"
+                        target='_blank'
                         class="bg-green-600 rounded-md py-1 md:py-2 px-5  shadow-md hover:bg-green-700 transition-all">
                         <span class="text-xs md:text-sm font-medium text-white">Linkni o'qish</span>
                       </a>
