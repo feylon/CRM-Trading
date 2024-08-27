@@ -326,7 +326,21 @@
   </div>
 
 <!-- modal -->
-<n-modal v-model:show="store.modals.addcalendar.show" preset="dialog" title="Dialog">
+<n-modal v-model:show="store.modals.addcalendar.show" 
+class="custom-card"
+    preset="card"
+    :style="{
+        width: '600px'
+      }"
+    title="Yangi qo'shish"
+    :bordered="false"
+    size="huge"
+    :segmented="{
+        content: 'soft',
+        footer: 'soft'
+      }"
+
+>
     <template #header>
       <div>Qo'shish</div>
     </template>
