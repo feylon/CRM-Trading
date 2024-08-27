@@ -4,7 +4,8 @@
             <div class="text-white">
                 <span
                     class="me-5 flex justify-center w-[240px]  block absolute text-white select-none text-[28px] flex items-center gap-1 top-[10px] left-[10px] font-semibold">
-                    <span class="text-[13px] rotate-45 duration-100"><i class="fas fa-square"></i></span>
+                    <!-- <span class="text-[13px] rotate-45 duration-100"><i class="fas fa-square"></i></span> -->
+                       <img src="/aileet.png" class="w-[40px]" alt=""> 
                     {{ ('Aileet') }}
                 </span>
             </div>
