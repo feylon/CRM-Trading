@@ -17,7 +17,6 @@ function getCustomTimestamp(timestamp) {
 }
 
 router.post("/", checkToken, async function (req, res) {
-   console.log(req.body) 
   const Schema = Joi.object({
     url: Joi.string().min(3).max(255),
     title: Joi.string().min(3).max(255).required(),

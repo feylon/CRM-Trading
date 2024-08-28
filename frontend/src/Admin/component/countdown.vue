@@ -56,6 +56,7 @@ onMounted(() => {
 
 onUnmounted(() => {
     clearInterval(intervalId.value);
+    
 });
 </script>
 

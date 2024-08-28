@@ -11,14 +11,7 @@
             </div>
 
             <div class="flex gap-3 items-center">
-                <n-dropdown trigger="hover" :options="notification_list" @select="changeLang">
-                    <n-badge class="me-3" :value="notification" :max="100">
-                        <span class="text-white material-symbols-outlined">
-                            notifications
-                        </span>
-
-                    </n-badge>
-                </n-dropdown>
+                <ring/>
                 <n-dropdown disabled trigger="hover" :options="options_lang" @select="changeLang">
                     <n-button>
                         <img :src="toggle == 'uz' ? '/1670868198_grizly-club-p-flag-uzbekistana-png-9.png' : '/EM7LidKw8aA.jpg'"
@@ -111,8 +104,10 @@ import { ref, h, onUnmounted, onMounted, watch } from 'vue';
 import url from "../../base"
 import { RouterLink, useRouter } from "vue-router";
 import { useMessage } from "naive-ui";
-import { v4 as uuidv4 } from 'uuid';
 import { Dean } from "../../Pinia/index.js";
+import ring from "./component/ring.vue"
+
+
 let store = Dean();
 
 let bodyStyle = {
@@ -222,16 +217,7 @@ onMounted(async () => {
 let toggle = ref('uz');
 let options_lang = [{ label: "O'zb", key: "uz" }, { label: "En", key: 'en' }];
 
-let delete1 = ref(0);
-let notification = ref(0);
-let notification_list = ref([]);
-let time = setInterval(() => {
-    notification.value++;
-    let date = new Date();
-    notification_list.value.push({ label: `${date.toLocaleTimeString()} : ${uuidv4()}`, key: `${uuidv4()}` });
-    delete1.value++;
-    if (delete1.value == 15) clearInterval(time);
-}, 1000)
+
 
 function changeLang(key) {
     if (String(key) == 'en') { localStorage.setItem('lang', 'en'); toggle.value = 'en'; }
