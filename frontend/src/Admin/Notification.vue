@@ -149,7 +149,6 @@ onMounted(async () => {
 
 });
 async function change_active(obj) {
-  console.log(obj);
   let token = localStorage.token;
   try {
     let backend = await fetch(`${url}calendar/active`, {

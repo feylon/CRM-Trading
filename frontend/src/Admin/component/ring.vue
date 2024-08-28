@@ -63,5 +63,5 @@ onMounted(async () => {
 setInterval(() => {
     callbackend();
     notification.value = 0;
-}, 6000);
+}, 60000);
 </script>

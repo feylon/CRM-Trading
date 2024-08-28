@@ -74,7 +74,6 @@ let confirmpassword = ref("");
 const message = useMessage();
 
 const submit = async function (obj){
-    console.log(obj);
     try {
         let token = localStorage.token;
         let backend = await fetch(`${url}admin/changepassword`,
