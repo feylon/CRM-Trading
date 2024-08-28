@@ -282,6 +282,7 @@ let backend = await fetch(`${url}calendar/getcalendar`,
     if (backend.status == 200) {
       backend = await backend.json();
       events.value = backend;
+      console.log(backend)
 }
   if(backend.status == 401) router.push('/login');
 }
