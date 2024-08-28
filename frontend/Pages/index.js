@@ -27,7 +27,11 @@ const router = createRouter({
           {
             path : "/changepassword",
             component : ()=>import ("../src/Admin/changepassword.vue")
-          }
+          },
+          {
+            path: "/",
+            component: () => import("../src/admin/Notification.vue"),
+          },
 
       ],
       
