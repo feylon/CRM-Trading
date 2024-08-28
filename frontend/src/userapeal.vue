@@ -12,14 +12,14 @@
                     </div>
                     <div class="grid grid-cols-1 gap-5 mt-5 md:grid-cols-2">
                         <input required v-model="firstname"
-                            class="w-full p-3 mt-2 text-gray-900 bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:border-outline"
+                            class="w-full p-3 mt-2  bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:border-outline"
                             type="text" placeholder="Ismingiz" name="firstName" autocomplete="name" />
                         <input required v-model="lastname"
-                            class="w-full p-3 mt-2 text-gray-900 bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:shadow-outline"
+                            class="w-full p-3 mt-2  bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:shadow-outline"
                             type="text" placeholder="Familiyangiz" name="lastName" autocomplete="family-name" />
 
                         <input required v-model="phone"
-                            class="w-full p-3 mt-2 text-gray-900 bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:shadow-outline"
+                            class="w-full p-3 mt-2  bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:shadow-outline"
                             type="tel" placeholder="Telefon raqamingiz" name="phone" autocomplete="tel" />
                     </div>
                     <div class="my-4">

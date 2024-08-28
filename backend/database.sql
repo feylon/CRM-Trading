@@ -49,3 +49,6 @@ CREATE TABLE calendar (
     tags VARCHAR(255),
     location VARCHAR(255)
 );
+ALTER TABLE calendar
+ADD COLUMN active BOOLEAN DEFAULT true;
+
