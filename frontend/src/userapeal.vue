@@ -30,7 +30,7 @@
                     <div class="flex justify-end w-[100%]">
                         <div class="w-1/2 my-2 lg:w-1/4">
                             <button type="submit"
-                                class="w-full p-3 text-sm font-bold tracking-wide text-gray-100 uppercase bg-gray-800 rounded rounded-xl hover:bg-blue-700-lg focus:outline-none focus:shadow-outline">
+                                class="w-full p-3 text-sm font-bold tracking-wide text-gray-100 uppercase bg-gray-800 rounded rounded-xl hover:bg-blue-700 transition-all duration-300-md focus:outline-none focus:shadow-outline">
                                 Yuborish
                             </button>
                         </div>
@@ -40,7 +40,7 @@
             <div class="w-full px-8 py-12 ml-auto bg-[#1B6485] lg:-mt-96 lg:w-2/6 rounded-2xl">
                 <div class="flex flex-col text-white">
                     <div class="flex w-2/3 my-4 lg:w-1/2">
-                        <img class="pt-2 pr-2 h-7 w-7" src="https://icons8.com/icon/OBmVbH2qOGwK/location"
+                        <img class="pt-2 pr-2 h-7 w-7" src="/office.png"
                             alt="location">
                         <div>
                             <h2 class="text-2xl">Office</h2>
@@ -48,14 +48,14 @@
                         </div>
                     </div>
                     <div class="flex w-2/3 my-4 lg:w-1/2">
-                        <img class="pt-2 pr-2 h-7 w-7 " src="https://icons8.com/icon/letUS1DJO1ou/call" alt="call us">
+                        <img class="pt-2 pr-2 h-7 w-7 " src="/office.png" alt="call us">
                         <div>
                             <h2 class="text-2xl">Call</h2>
                             <p class="text-gray-200" style="white-space: nowrap;">Tel:+232-79-15-39-15</p>
                         </div>
                     </div>
                     <div class="flex w-2/3 my-4 lg:w-1/2">
-                        <img class="pt-2 pr-2 h-7 w-7" src="https://icons8.com/icon/LPcVDft9Isqt/email" alt="Email us">
+                        <img class="pt-2 pr-2 h-7 w-7" src="/office.png" alt="Email us">
                         <div>
                             <h2 class="text-2xl">Email</h2>
                             <p class="text-gray-200" style="white-space: nowrap;">Email:kanujosephmelvin@gmail.com</p>
@@ -105,7 +105,7 @@ let submit = async function (obj) {
 
 <style>
 .tradingback {
-    background-image: url('./tradingback.png');
+    background-image: url('./tradingback1.png');
     background-size: cover;
 }
 </style>
