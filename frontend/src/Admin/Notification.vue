@@ -28,7 +28,7 @@
           </thead>
           <tbody>
             <tr v-for="(i, j) in data" v-if="data.length > 0">
-              <td>{{+ + j }}</td>
+              <td>{{ j + 1 }}</td>
               <td>
                 <div class="font-bold">{{ i.title }}</div>
               </td>

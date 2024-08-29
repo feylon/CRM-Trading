@@ -4,8 +4,14 @@
       <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
         <div>
           <img
-            src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
+            src="/aileet.png"
             class="w-32 mx-auto" />
+            <div class="flex justify-center w-full font-bold">
+              
+            <n-gradient-text :size="24"  type="success">
+    Aileet
+  </n-gradient-text>
+            </div>
         </div>
         <div class="mt-12 flex flex-col items-center">
           <h1 class="text-2xl xl:text-3xl font-extrabold">
@@ -36,12 +42,8 @@
                     </span>
                     <span class="flex gap-4  items-center" v-else>
                       Kirish
-                      <svg class="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                        <circle cx="8.5" cy="7" r="4" />
-                        <path d="M20 8v6M23 11h-6" />
-                      </svg>
+                      
+                      <i class="fas fa-right-to-bracket"></i>
                     </span>
                   </span>
                 </button>

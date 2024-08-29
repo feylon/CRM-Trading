@@ -1,14 +1,14 @@
 <template>
     <div class="bg-gray-200  overflow-hidden w-[100vw] h-[100vh]">
         <div class="w-full h-[50px] flex justify-between items-center bg-gray-900">
-            <div class="text-white">
+            <Router-link to="/" class="text-white">
                 <span
                     class="me-5 flex justify-center w-[240px]  block absolute text-white select-none text-[28px] flex items-center gap-1 top-[10px] left-[10px] font-semibold">
                     <!-- <span class="text-[13px] rotate-45 duration-100"><i class="fas fa-square"></i></span> -->
                        <img src="/aileet.png" class="w-[40px]" alt=""> 
                     {{ ('Aileet') }}
                 </span>
-            </div>
+            </Router-link>
 
             <div class="flex gap-3 items-center">
                 <ring/>
