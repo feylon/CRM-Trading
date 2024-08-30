@@ -21,12 +21,14 @@
             </n-form-item>
         </div>
         <div class="w-[600px]">
-            <n-form-item label="Tags" path="tags">
+            <!-- <n-form-item label="Tags" path="tags">
                 <n-input type="textarea" :autosize="{
                     minRows: 3,
                     maxRows: 5,
                 }" v-model:value="formValue.tags" @keydown.space.prevent="spacekey" placeholder="Teglar" />
-            </n-form-item>
+            </n-form-item> -->
+            <n-dynamic-tags  v-model:value="formValue.tags" />
+
         </div>
         <n-form-item label="Havola" path="url">
             <n-input v-model:value="formValue.url" placeholder="Title" />
@@ -60,7 +62,7 @@ const formValue = ref({
     start_time: null,
     end_time: null,
     description: null,
-    tags: null,
+    tags: [],
     location: null,
     url: null
 });
@@ -88,11 +90,11 @@ const rules = {
         trigger: ["blur", "input"],
         message: "Descriptionni kiriting"
     },
-    tags: {
-        required: false,
-        trigger: ["blur", "change"],
-        message: "Taglarni kiriting"
-    },
+    // tags: {
+    //     required: false,
+    //     trigger: ["blur", "change"],
+    //     message: "Taglarni kiriting"
+    // },
     location: {
         required: false,
         trigger: ["blur", "change"],
@@ -117,8 +119,15 @@ const handleValidateClick = async (e) => {
                         data[i] = formValue.value[i];
                     }
                 }
+                if(data.tags) {
+                    // data.tags.forEach((let i, let j)=> {data.tags[j] = data.tags[j].trim()})
+                    
+                    
+                    data.tags = data.tags.join('');
+                }
                 if (data.url) data.url = `https://${data.url}`;
-
+                    console.log(data.tags)
+                
                 let backend = await fetch(`${url}calendar/addcalendar`, {
                     method: "POST",
                     headers: {

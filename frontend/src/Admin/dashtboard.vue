@@ -254,13 +254,23 @@ const menuOptions = [
                 label: () => h(
                     RouterLink,
                     {
+                        to: "/Notification_apeal"
+                    },
+                    { default: () => "Kutilyotgan murojaatlar" }),
+                key: "Notification_apeal ",
+                icon: renderIcon("fas fa-clock-rotate-left")
+            },
+            {
+                label: () => h(
+                    RouterLink,
+                    {
                         to: "/Kalindar"
                     },
                     { default: () => "Kalindar" }),
                 key: "issues ",
                 icon: renderIcon("fas fa-receipt")
             },
-        
+            
             
         ]
     },
@@ -381,33 +391,8 @@ const options = ref([
         key: "header-divider",
         type: "divider"
     },
-    {
-        label: "lpsum1",
-        key: "stmt1"
-    },
-    {
-        key: "profil",
-        type: "render",
-        label: "salom",
-        render: () => {
-            return h("div", { class: "ps-4 duration-700 flex items-center hover:bg-blue-200 cursor-pointer flex border-t-[1px] border-solid" }, [
-                h("span",
-
-                    { innerHTML: `<span class="text-[20px] text-blue-950"><span class="material-symbols-outlined">admin_panel_settings</span></span>` },
-                    { class: "" }
-                ),
-                h("div",
-                    { class: "text-black ps-3" },
-                    { default: () => "Profil" }
-                )
-            ])
-        },
-        props: {
-            onClick: () => {
-                console.log("salom")
-            }
-        }
-    },
+    
+   
     {
         key: "Own_info",
         type: "render",
