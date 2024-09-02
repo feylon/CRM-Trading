@@ -5,13 +5,13 @@
                 <span
                     class="me-5 flex justify-center w-[240px]  block absolute text-white select-none text-[28px] flex items-center gap-1 top-[10px] left-[10px] font-semibold">
                     <!-- <span class="text-[13px] rotate-45 duration-100"><i class="fas fa-square"></i></span> -->
-                       <img src="/aileet.png" class="w-[40px]" alt=""> 
+                    <img src="/aileet.png" class="w-[40px]" alt="">
                     {{ ('Aileet') }}
                 </span>
             </Router-link>
 
             <div class="flex gap-3 items-center">
-                <ring/>
+                <ring />
                 <n-dropdown disabled trigger="hover" :options="options_lang" @select="changeLang">
                     <n-button>
                         <img :src="toggle == 'uz' ? '/1670868198_grizly-club-p-flag-uzbekistana-png-9.png' : '/EM7LidKw8aA.jpg'"
@@ -38,16 +38,9 @@
 
 
         <n-layout class="h-full" has-sider>
-            <n-layout-sider  bordered collapse-mode="width" :collapsed-width="64" :width="240" show-trigger
-                :inverted="inverted"
-                
-                :collapsed="collapsed"
-        @collapse="collapsed = true"
-        @expand="collapsed = false"
-                
-                >
+            <n-layout-sider bordered collapse-mode="width" :collapsed-width="64" :width="240" show-trigger
+                :inverted="inverted" :collapsed="collapsed" @collapse="collapsed = true" @expand="collapsed = false">
                 <n-menu class="" :inverted="inverted" :collapsed-width="64" :collapsed-icon-size="22"
-                
                     :options="menuOptions" />
             </n-layout-sider>
             <n-layout>
@@ -206,10 +199,10 @@ let data = ref({
 })
 const router = useRouter();
 async function getProfil() {
- let status = await store.getProfil();
- if(status == 401) router.push('/login')
-    
- data.value =  store.profile;
+    let status = await store.getProfil();
+    if (status == 401) router.push('/login')
+
+    data.value = store.profile;
 }
 onMounted(async () => {
     await getProfil();
@@ -270,17 +263,17 @@ const menuOptions = [
                 key: "issues ",
                 icon: renderIcon("fas fa-receipt")
             },
-            
-            
+
+
         ]
     },
     {
         label: "Tizim",
         key: "Tizim",
-        
+
         icon: renderIconSpan("engineering"),
         children: [
-        {
+            {
                 label: () => h(
                     RouterLink,
                     {
@@ -301,56 +294,31 @@ const menuOptions = [
                 key: "changepassword",
                 icon: renderIcon("fas fa-lock")
             }
-            
+
         ]
     },
     {
-        label: "Korzinka",
-        key: "tulov",
-        disabled : false,
-        icon: renderIconSpan("payments"),
-        children: [
+        label: () => h(
+            RouterLink,
             {
-                label: () => h(
-                    RouterLink,
-                    {
-                        to: "/korzinka"
-                    },
-                    { default: () => "korzinka" }),
-                key: "kontrakt",
-                icon: renderIcon("far fa-trash-can"),
-
+                to: "/korzinka"
             },
-            {
-                label: () => h(
-                    RouterLink,
-                    {
-                        to: "/login"
-                    },
-                    { default: () => "Kutubxona" }),
-                key: "payment_for_book",
-                icon: renderIconSpan("dictionary"),
-
-            }
-        ]
+            { default: () => "Korzinka" }),
+        key: "kontrakt",
+        icon: renderIcon("far fa-trash-can"),
 
     },
     {
-        label: "Ishchi ma'lumotlari",
-        disabled : true,
-        key: "student-information",
-        icon: renderIconSpan("dictionary"),
-        children: [
+        label: () => h(
+            RouterLink,
             {
-                label: () => h(
-                    RouterLink,
-                    {
-                        to: "/login"
-                    },
-                    { default: () => "Kutubxona" }),
-                key: ""
-            }
-        ]
+                to: "/login"
+            },
+            { default: () => "Tizimdan chiqish" }),
+        key: "reihufhjcnvxm",
+        icon: renderIcon("fas fa-arrow-right-from-bracket"),
+
+
     }
 ];
 
@@ -391,8 +359,8 @@ const options = ref([
         key: "header-divider",
         type: "divider"
     },
-    
-   
+
+
     {
         key: "Own_info",
         type: "render",
@@ -458,24 +426,45 @@ const options = ref([
             ])
         },
         props: {
-            onClick: () => {
-                router.push("/login")
+            onClick: async() => {
+                 
+  try {
+    const response = await fetch(`${url}admin/logout`, {
+      method: 'POST',
+      credentials: 'include', // Include cookies in the request
+    });
+
+    if (response.ok) {
+      // Clear any client-side stored data, if necessary
+      // e.g., localStorage.removeItem('token');
+
+      // Redirect to the login page or homepage
+      router.push('/login');
+    } else {
+      console.error('Logout failed:', await response.text());
+      // Handle the case where the server responded with an error
+    }
+  } catch (error) {
+    console.error('Logout failed:', error);
+    // Handle any network errors, etc.
+  }
+}
             }
         }
-    }
+    
 ]);
 
 function handleSelect(key) {
     message.info(String(key));
-    // console.log(key)
+
 }
 
 let collapsed = ref(localStorage.collapsed == "true" ? true : false);
-watch(collapsed, (collapsed,old)=>{
-    if(collapsed)
-    localStorage.setItem("collapsed", "true")
-else 
-localStorage.setItem("collapsed", "false")
+watch(collapsed, (collapsed, old) => {
+    if (collapsed)
+        localStorage.setItem("collapsed", "true")
+    else
+        localStorage.setItem("collapsed", "false")
 })
 </script>
 

@@ -7,6 +7,12 @@ function sign(id) {
 }
 
 function checkToken(req, res, next) {
+
+if (!req.session.IsAdmin) {
+    return res.status(401).send('Unauthorized');
+  }  
+  next();
+return;
   try {
     jwt.verify(req.header("-x-token"), process.env.JWT);
     next();
@@ -16,10 +22,7 @@ function checkToken(req, res, next) {
 }
 
 function get_id(req, res) {
-  try {
-    return jwt.verify(req.header("-x-token"), process.env.JWT).id;
-  } catch (err) {
-    return res.status(401).send({ error: "Error token" });
-  }
+    return req.session.adminId;
+
 }
 export { sign, get_id, checkToken };

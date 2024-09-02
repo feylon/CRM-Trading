@@ -27,7 +27,11 @@ router.post("/", async function (req, res) {
     if (!isLogin) {
       return res.status(400).send({ error: "Login or password error" });
     }
+    req.session.adminId = data.rows[0].id;
+    req.session.IsAdmin = true;
     res.status(200).send({ token: sign(Number(data.rows[0].id)) });
+    const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    req.session.clientIp = clientIp;
   } catch (error) {
     console.log(error);
   }
