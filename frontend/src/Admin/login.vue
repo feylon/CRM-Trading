@@ -87,7 +87,7 @@ const router = useRouter();
 const login = ref(null);
 const password = ref(null);
 async function loginfunc() {
-  console.log(login.value, password.value)
+
   if (!password.value && !password.value)
     return message.warning("Formani to'ldiring")
   if (password.value.length < 3 && login.value.length < 3)
@@ -113,7 +113,7 @@ async function loginfunc() {
       let store = Dean();
 // await store.getProfil();
 (async()=>{await store.getProfil();})()
-console.log(store.profile);
+
       router.push("/");
       login.value = '';
       password.value = '';
@@ -127,7 +127,7 @@ console.log(store.profile);
       return;
     }
   } catch (error) {
-    console.log(error)
+    
   }
 
 }

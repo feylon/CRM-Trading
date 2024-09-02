@@ -101,7 +101,7 @@ const submit = async function (obj){
         return;
        }
     } catch (error) {
-        console.log(error)
+
     }
 }
 </script>

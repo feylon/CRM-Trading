@@ -15,11 +15,11 @@ router.get("/all", checkToken, async function (req, res) {
     const { page, size } = req.query;
 
     let data = await global.pool.query(
-      `
-WITH total AS (
+      `WITH total AS (
     SELECT COUNT(*) AS total
     FROM apeal
     INNER JOIN apealstatus ON apealstatus.id = apeal.status
+    WHERE apeal.state = true
 ),
 paged AS (
     SELECT 
@@ -32,9 +32,11 @@ paged AS (
         apeal.status,
         apeal.reseen,
         apealstatus.id AS status_id,
-        apealstatus.name AS statusName
+        apealstatus.name AS statusName,
+        apeal.state AS delete
     FROM apeal
     INNER JOIN apealstatus ON apealstatus.id = apeal.status
+    WHERE apeal.state = true
     ORDER BY apeal.created_at DESC
     LIMIT $1 OFFSET ($2 - 1) * $1
 )
@@ -42,6 +44,7 @@ SELECT
     paged.*,
     total.total
 FROM paged, total;
+
 
 `,
       [size, page]
@@ -98,6 +101,58 @@ router.get("/apealstatus", checkToken, async function (req, res) {
 });
 
 
+
+
+router.get("/corzinca", checkToken, async function (req, res) {
+  const Schema = Joi.object({
+    size: Joi.number().integer().min(0).required(),
+    page: Joi.number().integer().min(0).required(),
+  });
+  let checkSchema = Schema.validate(req.query);
+  if (checkSchema.error)
+    return res.status(400).send({ error: checkSchema.error.message });
+  try {
+    const { page, size } = req.query;
+
+    let data = await global.pool.query(
+      `WITH total AS (
+    SELECT COUNT(*) AS total
+    FROM apeal
+    INNER JOIN apealstatus ON apealstatus.id = apeal.status
+    WHERE apeal.state = false
+),
+paged AS (
+    SELECT 
+        apeal.id AS id,
+        apeal.firstname,
+        apeal.lastname,
+        apeal.created_at,
+        apeal.description,
+        apeal.phone,
+        apeal.status,
+        apeal.reseen,
+        apealstatus.id AS status_id,
+        apealstatus.name AS statusName,
+        apeal.state AS delete
+    FROM apeal
+    INNER JOIN apealstatus ON apealstatus.id = apeal.status
+    WHERE apeal.state = false
+    ORDER BY apeal.created_at DESC
+    LIMIT $1 OFFSET ($2 - 1) * $1
+)
+SELECT 
+    paged.*,
+    total.total
+FROM paged, total;
+`,
+      [size, page]
+    );
+    const { rows } = data;
+    res.status(200).send(rows);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 
 export default router;

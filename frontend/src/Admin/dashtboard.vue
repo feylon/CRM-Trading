@@ -305,20 +305,20 @@ const menuOptions = [
         ]
     },
     {
-        label: "To'lov",
+        label: "Korzinka",
         key: "tulov",
-        disabled : true,
+        disabled : false,
         icon: renderIconSpan("payments"),
         children: [
             {
                 label: () => h(
                     RouterLink,
                     {
-                        to: "/login"
+                        to: "/korzinka"
                     },
-                    { default: () => "Kontrakt" }),
+                    { default: () => "korzinka" }),
                 key: "kontrakt",
-                icon: renderIconSpan("credit_card"),
+                icon: renderIcon("far fa-trash-can"),
 
             },
             {
@@ -467,7 +467,7 @@ const options = ref([
 
 function handleSelect(key) {
     message.info(String(key));
-    console.log(key)
+    // console.log(key)
 }
 
 let collapsed = ref(localStorage.collapsed == "true" ? true : false);

@@ -126,7 +126,7 @@ const handleValidateClick = async (e) => {
                     data.tags = data.tags.join('');
                 }
                 if (data.url) data.url = `https://${data.url}`;
-                    console.log(data.tags)
+                    
                 
                 let backend = await fetch(`${url}calendar/addcalendar`, {
                     method: "POST",
@@ -152,7 +152,7 @@ const handleValidateClick = async (e) => {
                 }
 
             } catch (error) {
-                console.log(error);
+                
             }
         } else {
             message.error('Invalid');

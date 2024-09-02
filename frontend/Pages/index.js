@@ -36,6 +36,10 @@ const router = createRouter({
           path: "/Notification_apeal",
           component: () => import("../src/admin/Notification_apeal.vue"),
         },
+        {
+          path: "/korzinka",
+          component: () => import("../src/admin/Corzina.vue"),
+        },
       ],
     },
   ],

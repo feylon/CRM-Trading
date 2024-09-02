@@ -44,7 +44,6 @@ const Dean = defineStore("counter", {
       if (backend.status == 200) {
         backend = await backend.json();
         this.profile = backend;
-        console.log(backend);
       }
     },
   },

@@ -52,3 +52,5 @@ CREATE TABLE calendar (
 ALTER TABLE calendar
 ADD COLUMN active BOOLEAN DEFAULT true;
 
+ALTER TABLE apeal
+ADD COLUMN state BOOLEAN DEFAULT true;

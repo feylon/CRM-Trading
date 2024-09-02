@@ -18,7 +18,7 @@
                             class="w-full p-3 mt-2  bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:shadow-outline"
                             type="text" placeholder="Familiyangiz" name="lastName" autocomplete="family-name" />
 
-                        <input required v-model="phone"
+                        <input @keydown="formatPhoneNumber()" required v-model="phone"
                             class="w-full p-3 mt-2  bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:shadow-outline"
                             type="tel" placeholder="Telefon raqamingiz" name="phone" autocomplete="tel" />
                     </div>
@@ -79,7 +79,7 @@ let phone = ref('');
 let description = ref('');
 
 let submit = async function (obj) {
-    console.log(obj);
+
     try {
         let backend = await fetch(`${url}addApeal`, {
             method: "POST",
@@ -88,7 +88,7 @@ let submit = async function (obj) {
             },
             body: JSON.stringify(obj)
         });
-        console.log(backend.status)
+        
         if (backend.status == 201) {
             firstname.value = '';
             lastname.value = '';
@@ -101,6 +101,12 @@ let submit = async function (obj) {
 
     }
 }
+
+
+
+let  formatPhoneNumber = function (phoneNumber) {
+  }
+
 </script>
 
 <style>

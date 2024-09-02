@@ -175,7 +175,7 @@ async function change_active(obj) {
       message.error(backend.error)
     }
   } catch (error) {
-    console.log(error)
+    
   }
 }
 
@@ -185,7 +185,7 @@ const cancelCallback = async function () {
 }
 
 const submitCallback = async function () {
-  console.log(deleteitem.value);
+  
   let token = localStorage.token;
   try {
     let backend = await fetch(`${url}calendar/delete/${deleteitem.value}`, {
@@ -211,7 +211,7 @@ const submitCallback = async function () {
       message.error(backend.error)
     }
   } catch (error) {
-    console.log(error)
+    
   }
 }
 

@@ -374,7 +374,6 @@ import { Dean } from "../../../../Pinia";
 
 import addcalendar from "../../Modals/addcalendar.vue";
 const store = Dean();
-console.log(store.modals.addcalendar.show)  
 /**************************************
  * PROPS
  * ************************************
