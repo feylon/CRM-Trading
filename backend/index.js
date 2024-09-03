@@ -4,6 +4,7 @@ import cron from "node-cron";
 import http from "http";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import rateLimit  from "express-rate-limit"
 
 // session
 import pgsession from "connect-pg-simple";
@@ -33,6 +34,13 @@ global.pool = pool;
 
 const app = express();
 app.use(cors());
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 10000, 
+  message: 'Ataka o`xshamadimi ?',
+});
+app.use(limiter);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -56,18 +64,8 @@ app.use(
 
 app.use(express.static("./static"));
 
-// const csrfProtection = csrf({ cookie: true });
-// app.use(csrfProtection);
 
-// app.use((err, req, res, next) => {
-//   console.log(req.session);
-//   if (err.code === "EBADCSRFTOKEN") {
-//     res.status(403);
-//     res.send("Form tampered with");
-//   } else {
-//     next(err);
-//   }
-// });
+
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
