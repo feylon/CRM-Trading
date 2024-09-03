@@ -51,7 +51,6 @@ router.post("/", checkToken, async function (req, res) {
   start_time = getCustomTimestamp(start_time);
   end_time = getCustomTimestamp(end_time);
 
-  console.log(start_time, end_time);
   try {
     let data = await global.pool.query(
       `

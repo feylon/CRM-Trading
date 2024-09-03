@@ -41,7 +41,6 @@
             </n-form-item>
         </div>
     </n-form>
-    <pre>{{ JSON.stringify(formValue, null, 2) }}</pre>
 </template>
 
 <script setup>
