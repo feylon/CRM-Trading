@@ -243,10 +243,11 @@ let callbackend = async (page) => {
     );
     if (backend.status == 200) {
       backend = await backend.json();
-      sizecount.value = Math.ceil(new Number(backend[0].total) / 10);
+      let jami = backend.length ? Number(backend[0].total) : 0;
+      sizecount.value = Math.max(Math.ceil(jami / size.value), 1);
       data.value = [...backend]
       loading.value = false;
-      total.value = backend[0].total;
+      total.value = jami;
       return;
     }
     if (backend.status == 401) return router.push('/login');

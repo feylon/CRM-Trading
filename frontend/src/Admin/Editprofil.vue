@@ -88,7 +88,9 @@ import { ref, onMounted, watch } from 'vue';
 import { useMessage } from "naive-ui"
 import url from "../../base"
 import { Dean } from "../../Pinia/index.js";
+import { useRouter } from "vue-router";
 let store = Dean();
+let router = useRouter();
 
 
 
@@ -139,7 +141,6 @@ async function submit(e) {
 
 
     let date = new Date(body.brithday);
-    // if(date > new Date()) message.
     let year = date.getFullYear();
     let month = String(date.getMonth() + 1).padStart(2, '0');
     let day = String(date.getDate()).padStart(2, '0');
@@ -156,7 +157,7 @@ async function submit(e) {
         body: JSON.stringify(body)
     });
     if (backend.status == 200) { store.getProfil(); return message.success("O'zgartirildi"); }
-    if (backend.status == 401) return window.location.href = '/dean/login';
+    if (backend.status == 401) return router.push('/login');
 
     if (backend.status == 400) {
         backend = await backend.json();
