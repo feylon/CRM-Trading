@@ -53,6 +53,7 @@ CROSS JOIN total;
     res.status(200).send(rows);
   } catch (error) {
     console.log(error);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 
@@ -87,6 +88,7 @@ router.get("/byid", checkToken, async function (req, res) {
     return res.status(200).send(data.rows);
   } catch (err) {
     console.log(err);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 
@@ -97,6 +99,7 @@ router.get("/apealstatus", checkToken, async function (req, res) {
     return res.status(200).send(data.rows);
   } catch (err) {
     console.log(err);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 

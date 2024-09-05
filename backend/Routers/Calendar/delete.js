@@ -17,7 +17,7 @@ router.delete("/:id", checkToken, async function (req, res) {
   } catch (error) {
     res.status(400).send({ error: "Server xatolikga uchradi" });
     console.log(error);
-    return;
+    return res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 export default router;

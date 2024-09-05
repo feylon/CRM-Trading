@@ -36,17 +36,18 @@ const upload = multer({
 
 router.post("/", [checkToken, upload.single("image")], async (req, res) => {
   const adminId = get_id(req, res);
-  // if(!req.body.file.url) return res.status(400).send({error : err.message})
+  if (!req.body.file || !req.body.file.url) return res.status(400).send({ error: "Rasm tanlanmagan" });
   try {
     let fileurl = await global.pool.query(
       "Select profil_url from  admin where id = $1",
       [adminId]
     );
 
-    fs.unlink(`static/${fileurl.rows[0].profil_url}`, (err) => {});
+    if (fileurl.rows[0] && fileurl.rows[0].profil_url)
+      fs.unlink(`static/${fileurl.rows[0].profil_url}`, (err) => {});
   } catch (error) {
     console.log(error);
-    return;
+    return res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 
   try {
@@ -58,6 +59,7 @@ router.post("/", [checkToken, upload.single("image")], async (req, res) => {
     return res.status(200).send({ Edited: true });
   } catch (error) {
     console.log(error);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 

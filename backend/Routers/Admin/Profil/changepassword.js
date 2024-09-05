@@ -41,6 +41,7 @@ router.post("/", checkToken, async function (req, res) {
     change_password = await hash(newpassword);
   } catch (error) {
     console.log(error);
+    return res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 
   try {
@@ -51,6 +52,7 @@ router.post("/", checkToken, async function (req, res) {
     return res.status(201).send({ Edited: true });
   } catch (error) {
     console.log(error);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 export default router;

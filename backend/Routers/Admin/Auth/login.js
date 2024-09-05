@@ -2,10 +2,19 @@ import { Router } from "express";
 import { check } from "../../../functions/bcrypt.js";
 import Joi from "joi";
 import { sign } from "../../../functions/jwtadmin.js";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
 
-router.post("/", async function (req, res) {
+let loginLimit = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: Number(process.env.LOGIN_LIMIT || 20),
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Juda ko'p urinish. 10 daqiqadan keyin qayta urinib ko'ring" },
+});
+
+router.post("/", loginLimit, async function (req, res) {
   let Schema = Joi.object({
     login: Joi.string().required().min(0).max(25),
     password: Joi.string().required().min(0).max(50),
@@ -17,7 +26,7 @@ router.post("/", async function (req, res) {
   const { login, password } = req.body;
   try {
     let data = await global.pool.query(
-      "Select id, password from admin where login = $1",
+      "Select id, password from admin where login = $1 and state = true",
       [login]
     );
     if (data.rows.length == 0)
@@ -29,11 +38,11 @@ router.post("/", async function (req, res) {
     }
     req.session.adminId = data.rows[0].id;
     req.session.IsAdmin = true;
+    req.session.clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     res.status(200).send({ token: sign(Number(data.rows[0].id)) });
-    const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    req.session.clientIp = clientIp;
   } catch (error) {
     console.log(error);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 

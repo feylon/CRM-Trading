@@ -12,10 +12,13 @@ let pool = new Pool(
         user,
         password,
         database,
-        port : databaseport
+        port : databaseport,
+        max : 10
     }
 );
- 
 
+pool.on("error", (err) => {
+  console.log("Postgres pool xatosi:", err.message);
+});
 
 export default  pool;

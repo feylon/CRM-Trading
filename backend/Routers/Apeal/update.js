@@ -31,7 +31,7 @@ let Schema = Joi.object({
         } catch (error) {
             if(error.code == '23503') return res.status(400).send({error : error.detail});
             console.log(error);
-            return;
+            return res.status(500).send({ error: "Server xatolikga uchradi" });
         }
     }
 
@@ -48,8 +48,7 @@ let Schema = Joi.object({
             if(error.code == '23503') return res.status(400).send({error : error.detail});
             
             console.log(error);
-
-            return;
+            return res.status(500).send({ error: "Server xatolikga uchradi" });
         }
     }
 
@@ -74,7 +73,7 @@ router.delete("/byid/:id", checkToken, async function (req, res){
             } catch (error) {
                 if(error.code == '23503') return res.status(400).send({error : error.detail});
                 console.log(error);
-                return;
+                return res.status(500).send({ error: "Server xatolikga uchradi" });
             }
         
     
@@ -99,7 +98,7 @@ router.delete("/byid/:id", checkToken, async function (req, res){
                 } catch (error) {
                     if(error.code == '23503') return res.status(400).send({error : error.detail});
                     console.log(error);
-                    return;
+                    return res.status(500).send({ error: "Server xatolikga uchradi" });
                 }
             
         
@@ -127,7 +126,7 @@ router.delete("/byid/:id", checkToken, async function (req, res){
                     } catch (error) {
                         if(error.code == '23503') return res.status(400).send({error : error.detail});
                         console.log(error);
-                        return;
+                        return res.status(500).send({ error: "Server xatolikga uchradi" });
                     }
                 
             

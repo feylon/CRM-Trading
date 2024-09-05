@@ -44,6 +44,7 @@ where id = $7`,
     if (error.code == "22P02")
       return res.status(400).send({ error: error.severity });
     console.log(error);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 export default router;

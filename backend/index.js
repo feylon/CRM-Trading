@@ -1,12 +1,13 @@
+import "dotenv/config";
 import express from "express";
 import dotenv from "dotenv";
 import cron from "node-cron";
 import http from "http";
+import fs from "fs";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import rateLimit  from "express-rate-limit"
 
-// session
 import pgsession from "connect-pg-simple";
 import session from "express-session";
 
@@ -14,29 +15,30 @@ const PgSession = pgsession(session);
 
 dotenv.config();
 
-// import files
-import Admin from "./Routers/admin/index.js";
+import Admin from "./Routers/Admin/index.js";
 import Apeal from "./Routers/Apeal/index.js";
 import Calendar from "./Routers/Calendar/index.js";
 import CalendarNotification from "./Routers/Notification/index.js";
+import addApeal from "./Routers/Apeal/add.js";
 
 import pool from "./functions/datatabase.js";
+import { waitDb, seedAdmin } from "./functions/seed.js";
 global.pool = pool;
 
-(async () => {
-  try {
-    await pool.connect();
-    console.log("Connected to the database");
-  } catch (error) {
-    console.log("Database error", error);
-  }
-})();
+if (!fs.existsSync("./static/profil_pictures"))
+  fs.mkdirSync("./static/profil_pictures", { recursive: true });
 
 const app = express();
-app.use(cors());
+app.set("trust proxy", 1);
+
+let origins = (process.env.CORS_ORIGIN || "").split(",").map(i => i.trim()).filter(Boolean);
+app.use(cors({
+  origin : origins.length ? origins : true,
+  credentials : true
+}));
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 10000, 
+  windowMs: 15 * 60 * 1000,
+  max: 10000,
   message: 'Ataka o`xshamadimi ?',
 });
 app.use(limiter);
@@ -53,19 +55,17 @@ app.use(
     }),
     secret: process.env.session,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       maxAge: 4 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.COOKIE_SECURE === "true",
       httpOnly: true,
+      sameSite : "lax"
     },
   })
 );
 
 app.use(express.static("./static"));
-
-
-
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
@@ -76,6 +76,15 @@ app.use((err, req, res, next) => {
     });
   }
   next(err);
+});
+
+app.get("/health", async (req, res) => {
+  try {
+    await global.pool.query("select 1");
+    res.status(200).send({ status: "ok", db: true, time: new Date() });
+  } catch (error) {
+    res.status(503).send({ status: "fail", db: false });
+  }
 });
 
 Admin.forEach((element) => {
@@ -94,18 +103,35 @@ CalendarNotification.forEach((element) => {
   app.use(`/notification${element.path}`, element.route);
 });
 
-// another routers
-import addApeal from "./Routers/Apeal/add.js";
 app.use("/addApeal", addApeal);
+
+app.use((req, res) => {
+  res.status(404).send({ error: "Bunday manzil topilmadi" });
+});
+
+app.use((err, req, res, next) => {
+  console.log(err);
+  if (res.headersSent) return;
+  res.status(500).send({ error: "Server xatolikga uchradi" });
+});
 
 cron.schedule("0 1 * * *", async () => {
   try {
-    await global.pool.query(`delete FROM public.session`);
+    await global.pool.query(`delete FROM public.session where expire < NOW()`);
     console.log("Session is cleaned!");
   } catch (error) {}
 });
 
 const server = http.createServer(app);
-server.listen(process.env.PORT, function () {
-  console.log("Server is running on:", process.env.PORT);
-});
+
+(async () => {
+  let ok = await waitDb(pool);
+  if (!ok) {
+    console.log("Database error: bazaga ulanib bo'lmadi");
+    process.exit(1);
+  }
+  await seedAdmin(pool);
+  server.listen(process.env.PORT || 4100, function () {
+    console.log("Server is running on:", process.env.PORT || 4100);
+  });
+})();

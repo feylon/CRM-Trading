@@ -15,6 +15,7 @@ WHERE start_time < NOW()
     res.status(200).send(data.rows);
   } catch (error) {
     console.log(error);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 
@@ -34,6 +35,7 @@ WHERE start_time < NOW()
     res.status(200).send(data.rows);
   } catch (error) {
     console.log(error);
+    res.status(500).send({ error: "Server xatolikga uchradi" });
   }
 });
 export default router;
