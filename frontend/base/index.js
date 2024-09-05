@@ -1,1 +1,4 @@
-export default  'http://localhost:4100/'
+let url = import.meta.env.VITE_API_URL || '/'
+if(!url.endsWith('/')) url = url + '/'
+
+export default url

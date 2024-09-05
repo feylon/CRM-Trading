@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import login from "../src/admin/login.vue";
+import login from "../src/Admin/login.vue";
 import welcome from "../src/userapeal.vue";
 
 const router = createRouter({
@@ -9,11 +9,11 @@ const router = createRouter({
     { path: "/welcome", component: welcome },
     {
       path: "/",
-      component: () => import("../src/admin/dashtboard.vue"),
+      component: () => import("../src/Admin/dashtboard.vue"),
       children: [
         {
           path: "/editprofil",
-          component: () => import("../src/admin/Editprofil.vue"),
+          component: () => import("../src/Admin/Editprofil.vue"),
         },
 
         {
@@ -30,15 +30,15 @@ const router = createRouter({
         },
         {
           path: "/",
-          component: () => import("../src/admin/Notification.vue"),
+          component: () => import("../src/Admin/Notification.vue"),
         },
         {
           path: "/Notification_apeal",
-          component: () => import("../src/admin/Notification_apeal.vue"),
+          component: () => import("../src/Admin/Notification_apeal.vue"),
         },
         {
           path: "/korzinka",
-          component: () => import("../src/admin/Corzina.vue"),
+          component: () => import("../src/Admin/Corzina.vue"),
         },
       ],
     },

@@ -4,7 +4,6 @@
             <Router-link to="/" class="text-white">
                 <span
                     class="me-5 flex justify-center w-[240px]  block absolute text-white select-none text-[28px] flex items-center gap-1 top-[10px] left-[10px] font-semibold">
-                    <!-- <span class="text-[13px] rotate-45 duration-100"><i class="fas fa-square"></i></span> -->
                     <img src="/aileet.png" class="w-[40px]" alt="">
                     {{ ('Aileet') }}
                 </span>
@@ -22,7 +21,7 @@
                 <div class="h-full w-[200px] cursor-pointer me-4">
                     <n-dropdown trigger="hover" :options="options" @select="handleSelect">
                         <div class="h-full ps-3 flex items-center w-full border-s-[1px]">
-                            <img :src="`${url}/${data.profil_url}`" class="w-[40px] h-[40px] rounded-[50%]" alt="">
+                            <img :src="avatar()" class="w-[40px] h-[40px] rounded-[50%] object-cover" alt="">
                             <div class="flex flex-col">
                                 <span class="text-white font-bold ps-3">{{ data.lastname }} {{ data.firstname }}</span>
                                 <span class="text-white text-[12px] text-center">Admin</span>
@@ -181,7 +180,7 @@ const handleSubmit = async () => {
 
 
 
-// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -198,6 +197,24 @@ let data = ref({
     firstname: ''
 })
 const router = useRouter();
+
+let avatar = () => {
+    if (!data.value.profil_url) return '/aileet.png'
+    return `${url}${data.value.profil_url}`
+}
+
+let logout = async () => {
+    try {
+        await fetch(`${url}admin/logout`, {
+            method: 'POST',
+            credentials: 'include',
+        });
+    } catch (error) {
+    }
+    localStorage.removeItem('token')
+    store.profile = {}
+    router.push('/login')
+}
 async function getProfil() {
     let status = await store.getProfil();
     if (status == 401) router.push('/login')
@@ -310,9 +327,10 @@ const menuOptions = [
     },
     {
         label: () => h(
-            RouterLink,
+            "a",
             {
-                to: "/login"
+                onClick: logout,
+                class: "cursor-pointer"
             },
             { default: () => "Tizimdan chiqish" }),
         key: "reihufhjcnvxm",
@@ -335,7 +353,7 @@ const options = ref([
                     h("img", {
                         round: true,
                         style: "margin-right: 8px;",
-                        src: `${url}/${data.value.profil_url}`,
+                        src: avatar(),
                         class: "w-[60px] rounded-md m-3",
                         title: `${data.value.lastname} ${data.value.firstname}`
                     }),
@@ -397,7 +415,6 @@ const options = ref([
                 ),
                 h("div",
                     { class: "text-black ps-3" },
-                    // { innerHTML: () => "Profil rasmini yangilash" },
                     [h("label", { innerHTML: "Profil rasmini yangilash" }, { class: "text-red-600 ps-3" })]
                 )
             ])
@@ -426,31 +443,9 @@ const options = ref([
             ])
         },
         props: {
-            onClick: async() => {
-                 
-  try {
-    const response = await fetch(`${url}admin/logout`, {
-      method: 'POST',
-      credentials: 'include', // Include cookies in the request
-    });
-
-    if (response.ok) {
-      // Clear any client-side stored data, if necessary
-      // e.g., localStorage.removeItem('token');
-
-      // Redirect to the login page or homepage
-      router.push('/login');
-    } else {
-      console.error('Logout failed:', await response.text());
-      // Handle the case where the server responded with an error
-    }
-  } catch (error) {
-    console.error('Logout failed:', error);
-    // Handle any network errors, etc.
-  }
-}
-            }
+            onClick: logout
         }
+    }
     
 ]);
 
