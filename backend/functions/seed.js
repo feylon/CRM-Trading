@@ -1,4 +1,6 @@
 import { hash } from "./bcrypt.js";
+import fs from "fs";
+import path from "path";
 
 let sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -35,4 +37,14 @@ async function seedAdmin(pool) {
   }
 }
 
-export { waitDb, seedAdmin };
+async function migrate(pool) {
+  try {
+    let sql = fs.readFileSync(path.resolve("database.sql"), "utf8");
+    await pool.query(sql);
+    console.log("Jadvallar tekshirildi");
+  } catch (error) {
+    console.log("Migratsiya xatosi:", error.message);
+  }
+}
+
+export { waitDb, seedAdmin, migrate };

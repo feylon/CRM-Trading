@@ -1,4 +1,4 @@
-create table admin (
+create table if not exists admin (
 id bigserial primary key,
 email varchar(500) not null unique,
 login varchar(500) not null unique,
@@ -11,34 +11,35 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 Parent_Name varchar(500),
 profil_url varchar(500),
 state BOOLEAN DEFAULT true);
-insert into admin (email, login, password, firstname, brithday) values
-('jamshid14092002@gmail.com','jamshid14092002','$2b$10$qszd/we2sPerBlHoeUKageRfkVnM9T5LUndqxhgli3NmJdTHRhbOG', 'Jamshid', '14-09-2002');
--- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-create table apealStatus(
+
+create table if not exists apealStatus(
 id bigserial primary key unique,
 	name varchar not null unique
 );
 insert into apealStatus (name)
 values
-('seen'), ('notseen'), ('panding'), ('cancel');
--- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
--- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-CREATE TABLE apeal (
+('seen'), ('notseen'), ('panding'), ('cancel')
+on conflict (name) do nothing;
+
+CREATE TABLE if not exists apeal (
     id BIGSERIAL PRIMARY KEY,
     firstname VARCHAR(500) NOT NULL,
     lastname VARCHAR(500) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     description VARCHAR(500),
 	phone VARCHAR(500),
-    status INTEGER DEFAULT 1,
+    status INTEGER DEFAULT 2,
     reseen DATE,
+    state BOOLEAN DEFAULT true,
     CONSTRAINT fk_status FOREIGN KEY (status) REFERENCES apealstatus (id),
     CONSTRAINT check_reseen_not_null CHECK (
         (status = 3 AND reseen IS NOT NULL) OR status != 3
     )
 );
--- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-CREATE TABLE calendar (
+create index if not exists idx_apeal_state on apeal (state, created_at desc);
+create index if not exists idx_apeal_status on apeal (status);
+
+CREATE TABLE if not exists calendar (
     id SERIAL PRIMARY KEY,
     url VARCHAR(255),
     title VARCHAR(255),
@@ -47,21 +48,23 @@ CREATE TABLE calendar (
     description TEXT,
     image VARCHAR(255),
     tags VARCHAR(255),
-    location VARCHAR(255)
+    location VARCHAR(255),
+    active BOOLEAN DEFAULT true
 );
-ALTER TABLE calendar
-ADD COLUMN active BOOLEAN DEFAULT true;
 
-ALTER TABLE apeal
-ADD COLUMN state BOOLEAN DEFAULT true;
--- Seesion
-CREATE TABLE "session" (
-  "sid" varchar NOT NULL COLLATE "default",
+create table if not exists apeal_comment (
+    id bigserial primary key,
+    apeal_id bigint not null references apeal (id) on delete cascade,
+    admin_id bigint references admin (id) on delete set null,
+    text varchar(1000) not null,
+    created_at timestamp default current_timestamp
+);
+create index if not exists idx_comment_apeal on apeal_comment (apeal_id);
+
+CREATE TABLE if not exists "session" (
+  "sid" varchar NOT NULL COLLATE "default" PRIMARY KEY,
   "sess" json NOT NULL,
   "expire" timestamp(6) NOT NULL
-)
-WITH (OIDS=FALSE);
+);
 
-ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid");
-
-CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+CREATE INDEX if not exists "IDX_session_expire" ON "session" ("expire");

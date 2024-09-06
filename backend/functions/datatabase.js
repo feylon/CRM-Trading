@@ -6,6 +6,7 @@ dotenv.config();
 
 
 const {host, user, password, database, databaseport} = process.env;
+const tz = process.env.TZ || Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Tashkent";
 let pool = new Pool(
     {
         host,
@@ -13,7 +14,8 @@ let pool = new Pool(
         password,
         database,
         port : databaseport,
-        max : 10
+        max : 10,
+        options : `-c TimeZone=${tz}`
     }
 );
 
