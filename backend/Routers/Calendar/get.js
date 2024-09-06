@@ -15,9 +15,11 @@ router.get("/", checkToken, async function(req, res){
     description,
     image,
     tags,
-    location
+    location,
+    active
 FROM
-    calendar;
+    calendar
+order by start_time;
 
             `);
             res.status(200).send(data.rows)

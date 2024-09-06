@@ -20,7 +20,7 @@ router.post("/", checkToken, async function (req, res) {
       `update calendar set active = $1 where id = $2;`,
       [active, id]
     );
-    res.status(201).send({ created: "Success :)" });
+    res.status(200).send({ edited: true });
   } catch (error) {
     res.status(400).send({ error: "Server xatolikga uchradi" });
     console.log(error);
