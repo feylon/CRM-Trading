@@ -19,10 +19,11 @@ import Admin from "./Routers/Admin/index.js";
 import Apeal from "./Routers/Apeal/index.js";
 import Calendar from "./Routers/Calendar/index.js";
 import CalendarNotification from "./Routers/Notification/index.js";
+import Stats from "./Routers/Stats/index.js";
 import addApeal from "./Routers/Apeal/add.js";
 
 import pool from "./functions/datatabase.js";
-import { waitDb, seedAdmin } from "./functions/seed.js";
+import { waitDb, seedAdmin, migrate } from "./functions/seed.js";
 global.pool = pool;
 
 if (!fs.existsSync("./static/profil_pictures"))
@@ -103,6 +104,10 @@ CalendarNotification.forEach((element) => {
   app.use(`/notification${element.path}`, element.route);
 });
 
+Stats.forEach((element) => {
+  app.use(`/stats${element.path}`, element.route);
+});
+
 app.use("/addApeal", addApeal);
 
 app.use((req, res) => {
@@ -130,6 +135,7 @@ const server = http.createServer(app);
     console.log("Database error: bazaga ulanib bo'lmadi");
     process.exit(1);
   }
+  await migrate(pool);
   await seedAdmin(pool);
   server.listen(process.env.PORT || 4100, function () {
     console.log("Server is running on:", process.env.PORT || 4100);
