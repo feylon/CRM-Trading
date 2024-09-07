@@ -243,7 +243,26 @@ function renderIconSpan(name) {
 
 let inverted = ref(true)
 const menuOptions = [
-
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: "/statistika"
+            },
+            { default: () => "Statistika" }),
+        key: "statistika",
+        icon: renderIcon("fas fa-chart-pie")
+    },
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: "/"
+            },
+            { default: () => "Bildirishnomalar" }),
+        key: "bildirishnoma",
+        icon: renderIcon("fas fa-bell")
+    },
     {
         label: "Murojaatlar",
         key: "pinball-1973",

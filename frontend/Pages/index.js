@@ -12,6 +12,10 @@ const router = createRouter({
       component: () => import("../src/Admin/dashtboard.vue"),
       children: [
         {
+          path: "/statistika",
+          component: () => import("../src/Admin/Statistika.vue"),
+        },
+        {
           path: "/editprofil",
           component: () => import("../src/Admin/Editprofil.vue"),
         },
@@ -42,6 +46,7 @@ const router = createRouter({
         },
       ],
     },
+    { path: "/:catchAll(.*)", redirect: "/" },
   ],
 });
 
