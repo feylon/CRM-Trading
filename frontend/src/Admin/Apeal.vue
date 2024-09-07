@@ -8,6 +8,24 @@
       </p>
       <div class="mx-auto select-auto mt-5 w-full lg:w-[1200px] items-center gap-4 flex flex-col">
 
+        <div class="flex flex-wrap gap-3 w-full items-center bg-white p-3 rounded-lg shadow-sm">
+          <div class="w-[260px]">
+            <n-input v-model:value="search" clearable placeholder="Ism, familiya, telefon..." @keyup.enter="qidir">
+              <template #prefix><i class="fas fa-magnifying-glass text-gray-400"></i></template>
+            </n-input>
+          </div>
+          <div class="w-[170px]">
+            <n-select v-model:value="status" :options="statuslar" clearable placeholder="Holati" />
+          </div>
+          <n-date-picker v-model:value="oraliq" type="daterange" clearable />
+          <n-button type="primary" @click="qidir">Qidirish</n-button>
+          <n-button @click="tozala" quaternary>Tozalash</n-button>
+          <div class="flex-1"></div>
+          <n-button type="success" :loading="exportLoading" @click="exportCsv">
+            <i class="fas fa-file-csv me-2"></i> Yuklab olish
+          </n-button>
+        </div>
+
         <div class="container overflow-x-clip">
 
           <n-table v-if="!loading" :bordered="false" :single-line="false">
@@ -50,13 +68,15 @@
                 </td>
                 <td class="text-center select-text">{{ i.phone }}</td>
                 <td class="text-center">{{ i.description }}</td>
-                <td class="text-center">{{ i.statusname }}</td>
+                <td class="text-center"><n-tag size="small" :type="holatTur[i.statusname]">{{ holatNomi(i.statusname) }}</n-tag></td>
                 <td class="text-center">{{ (new Date(i.created_at)).toLocaleString() }}</td>
                 <td>
                   <div class="flex justify-center">
-                    <n-button type="tertiary" @click="editmodal(i)">
-                      <i class="fas fa-pen"></i>
-                    </n-button>
+                    <n-badge :value="Number(i.comments)" :max="99" type="info">
+                      <n-button type="tertiary" @click="editmodal(i)">
+                        <i class="fas fa-pen"></i>
+                      </n-button>
+                    </n-badge>
                   </div>
                 </td>
 
@@ -78,6 +98,11 @@
 
               </tr>
 
+              <tr v-if="!data.length">
+                <td colspan="9">
+                  <n-empty description="Ma'lumot topilmadi" class="py-5" />
+                </td>
+              </tr>
             </tbody>
           </n-table>
 
@@ -140,7 +165,6 @@
     </div>
   </div>
 
-  <!-- Modal section -->
 
   <n-modal v-model:show="store.modals.editApeal.show" class="custom-card" preset="card" :style="{ width: '600px' }"
     :title="`${store.modals.editApeal.data.lastname} ${store.modals.editApeal.data.firstname}`" :bordered="true"
@@ -166,7 +190,6 @@ import editapeals from "./Modals/editapeals.vue";
 
 
 let store = Dean();
-// modal
 
 function editmodal(data) {
   store.modals.editApeal.show = true;
@@ -189,7 +212,7 @@ let deletedata = async function () {
 
     });
     if (backend.status == 200) {
-      message.success("Ma'lumot o'chirilid");
+      message.success("Ma'lumot korzinkaga o'tkazildi");
 
       callbackend(page.value);
       return;
@@ -212,7 +235,6 @@ let cancelCallback = function () {
 
 
 
-// *modal
 let page = ref(1);
 let message = useMessage()
 let size = ref(10);
@@ -227,12 +249,94 @@ watch(page, (page, old) => {
 
 })
 
+let search = ref('');
+let status = ref(null);
+let oraliq = ref(null);
+let statuslar = ref([]);
+let exportLoading = ref(false);
+let holatTur = { seen: 'success', notseen: 'info', panding: 'warning', cancel: 'error' };
+let holatNomi = (n) => ({ seen: "Ko'rilgan", notseen: "Ko'rilmagan", panding: "Kutilmoqda", cancel: "Bekor qilingan" }[n] || n);
+
+let sanaStr = (t) => {
+  let d = new Date(t);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+let filterParams = () => {
+  let p = {};
+  if (search.value && search.value.trim()) p.search = search.value.trim();
+  if (status.value) p.status = status.value;
+  if (oraliq.value) {
+    p.from = sanaStr(oraliq.value[0]);
+    p.to = sanaStr(oraliq.value[1]);
+  }
+  return p;
+}
+
+let qidir = () => {
+  if (page.value != 1) page.value = 1;
+  else callbackend(1);
+}
+
+let tozala = () => {
+  search.value = '';
+  status.value = null;
+  oraliq.value = null;
+  qidir();
+}
+
+let timer;
+watch(search, () => {
+  clearTimeout(timer);
+  timer = setTimeout(qidir, 500);
+});
+watch([status, oraliq], () => qidir());
+
+let getStatuslar = async () => {
+  try {
+    let backend = await fetch(`${url}apeal/getapeal/apealstatus`, {
+      headers: { '-x-token': localStorage.token }
+    });
+    if (backend.status == 200) {
+      backend = await backend.json();
+      statuslar.value = backend.map(i => ({ value: Number(i.id), label: holatNomi(i.name) }));
+    }
+  } catch (error) {
+  }
+}
+
+let exportCsv = async () => {
+  exportLoading.value = true;
+  try {
+    let backend = await fetch(`${url}apeal/getapeal/export?${new URLSearchParams(filterParams()).toString()}`, {
+      headers: { '-x-token': localStorage.token }
+    });
+    if (backend.status == 401) return router.push('/login');
+    if (backend.status != 200) {
+      message.error("Yuklab bo'lmadi");
+      return;
+    }
+    let blob = await backend.blob();
+    let a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `murojaatlar_${sanaStr(Date.now())}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+  } catch (error) {
+    message.error("Server bilan aloqa uzildi")
+  } finally {
+    exportLoading.value = false;
+  }
+}
+
 let callbackend = async (page) => {
   data.value = [];
   loading.value = true;
   let token = localStorage.token; try {
 
-    let backend = await fetch(`${url}apeal/getapeal/all?${(new URLSearchParams({ page: page, size: size.value })).toString()}`,
+    let backend = await fetch(`${url}apeal/getapeal/all?${(new URLSearchParams({ page: page, size: size.value, ...filterParams() })).toString()}`,
       {
         method: "GET",
         headers: {
@@ -250,14 +354,16 @@ let callbackend = async (page) => {
       total.value = jami;
       return;
     }
+    loading.value = false;
     if (backend.status == 401) return router.push('/login');
   } catch (error) {
-
+    loading.value = false;
     if (error.message == "Failed to fetch") return message.error("Server bilan aloqa uzildi")
   }
 }
 
 onMounted(async () => {
+  getStatuslar();
   callbackend(1);
 });
 
@@ -266,6 +372,7 @@ watch(
   (data, old) => {
     if (data) {
       callbackend(page.value);
+      store.modals.editApeal.loading = false;
 
     }
 
@@ -279,28 +386,26 @@ watch(
 
 <style>
 .custom-scroll {
-  /* Enables vertical scrolling */
-  scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: rgb(0, 20, 60) #eee; /* For Firefox: thumb color, track color */
+  scrollbar-width: thin;
+  scrollbar-color: rgb(0, 20, 60) #eee;
 }
 
-/* Webkit Browsers (Chrome, Safari, Edge) */
 .custom-scroll::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
+  width: 8px;
 }
 
 .custom-scroll::-webkit-scrollbar-track {
-  background: rgb(0, 20, 60); /* Background color of the track */
+  background: rgb(0, 20, 60);
 }
 
 .custom-scroll::-webkit-scrollbar-thumb {
-  background-color: #888; /* Scrollbar color */
-  border-radius: 10px; /* Rounded corners for the scrollbar */
-  border: 2px solid rgb(0, 20, 60); /* Space around the scrollbar */
+  background-color: #888;
+  border-radius: 10px;
+  border: 2px solid rgb(0, 20, 60);
 }
 
 .custom-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(0, 20, 60); /* Color when hovering over the scrollbar */
+  background-color: rgb(0, 20, 60);
 }
 
 
