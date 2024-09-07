@@ -71,7 +71,34 @@
 
     </div>  
     <div class="flex justify-end mt-5">
-        <n-button @click="save({status : data.status_id, id :((store.modals.editApeal.data.id)), panding : panding, reseen : reseen })">Saqlash</n-button>
+        <n-button type="primary" @click="save({status : data.status_id, id :((store.modals.editApeal.data.id)), panding : panding, reseen : reseen })">Saqlash</n-button>
+    </div>
+
+    <n-divider title-placement="left">Izohlar ({{ izohlar.length }})</n-divider>
+    <div class="flex gap-2 items-start">
+        <n-input v-model:value="izoh" type="textarea" maxlength="1000" show-count
+            :autosize="{ minRows: 1, maxRows: 4 }" placeholder="Masalan: qo'ng'iroq qilindi, ertaga qayta bog'lanish kerak" />
+        <n-button type="info" :loading="izohLoading" :disabled="!izoh.trim()" @click="izohQosh">
+            <i class="fas fa-paper-plane"></i>
+        </n-button>
+    </div>
+    <div class="max-h-[220px] overflow-auto mt-3 pe-1">
+        <n-empty v-if="!izohlar.length" size="small" description="Hali izoh yo'q" />
+        <div v-for="i in izohlar" :key="i.id" class="bg-gray-100 rounded-lg p-2 mb-2 group">
+            <div class="flex justify-between text-[12px] text-gray-500">
+                <span class="font-bold text-teal-700">{{ i.lastname }} {{ i.firstname }}</span>
+                <span class="flex gap-2 items-center">
+                    {{ new Date(i.created_at).toLocaleString() }}
+                    <n-popconfirm @positive-click="izohOchir(i.id)" positive-text="Ha" negative-text="Yo'q">
+                        <template #trigger>
+                            <i class="far fa-trash-can text-red-500 cursor-pointer"></i>
+                        </template>
+                        Izoh o'chirilsinmi?
+                    </n-popconfirm>
+                </span>
+            </div>
+            <div class="text-[14px] whitespace-pre-wrap break-words">{{ i.text }}</div>
+        </div>
     </div>
     </div>
     
@@ -86,11 +113,10 @@ import { useMessage } from 'naive-ui';
 
 
 let message = useMessage();
-let date = '2024-09-10'
 const router = useRouter();
 const store = Dean();
 
-const today = new Date();  // Gets today's date and time
+const today = new Date();
 let timestamp = today.getTime();
 
 
@@ -118,6 +144,60 @@ watch(
 
 
 const apeallist = ref([])
+let izohlar = ref([])
+let izoh = ref('')
+let izohLoading = ref(false)
+
+let getIzohlar = async () => {
+    let id = store.modals.editApeal.data.id;
+    if (!id) return;
+    try {
+        let backend = await fetch(`${url}apeal/comment/${id}`, {
+            headers: { '-x-token': localStorage.token }
+        });
+        if (backend.status == 401) return router.push('/login');
+        if (backend.status == 200) izohlar.value = await backend.json();
+    } catch (error) {
+    }
+}
+
+let izohQosh = async () => {
+    let id = store.modals.editApeal.data.id;
+    izohLoading.value = true;
+    try {
+        let backend = await fetch(`${url}apeal/comment/${id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json; charset=utf-8", '-x-token': localStorage.token },
+            body: JSON.stringify({ text: izoh.value })
+        });
+        if (backend.status == 401) return router.push('/login');
+        if (backend.status == 201) {
+            izoh.value = '';
+            await getIzohlar();
+            store.modals.editApeal.loading = true;
+        } else {
+            backend = await backend.json();
+            message.error(backend.error);
+        }
+    } catch (error) {
+        message.error("Server bilan aloqa uzildi")
+    }
+    izohLoading.value = false;
+}
+
+let izohOchir = async (cid) => {
+    try {
+        let backend = await fetch(`${url}apeal/comment/byid/${cid}`, {
+            method: "DELETE",
+            headers: { '-x-token': localStorage.token }
+        });
+        if (backend.status == 200) {
+            izohlar.value = izohlar.value.filter(i => i.id != cid);
+            store.modals.editApeal.loading = true;
+        }
+    } catch (error) {
+    }
+}
 let reseen = ref(timestamp)
 let panding = ref(false)
 
@@ -175,6 +255,7 @@ let backend = await fetch(`${url}apeal/getapeal/byid?id=${id}`, {
         }
 };
 await getapeal();
+await getIzohlar();
 })
 
 

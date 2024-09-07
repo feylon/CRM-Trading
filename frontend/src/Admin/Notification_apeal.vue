@@ -140,7 +140,6 @@
       </div>
     </div>
   
-    <!-- Modal section -->
   
     <n-modal v-model:show="store.modals.editApeal.show" class="custom-card" preset="card" :style="{ width: '600px' }"
       :title="`${store.modals.editApeal.data.lastname} ${store.modals.editApeal.data.firstname}`" :bordered="true"
@@ -167,7 +166,6 @@
   import reversecountdown from "./component/reversecountdown.vue";
   
   let store = Dean();
-  // modal
   
   function editmodal(data) {
     store.modals.editApeal.show = true;
@@ -213,7 +211,6 @@
   
   
   
-  // *modal
   let page = ref(1);
   let message = useMessage()
   let size = ref(10);
@@ -267,6 +264,7 @@
     (data, old) => {
       if (data) {
         callbackend(page.value);
+        store.modals.editApeal.loading = false;
   
       }
   

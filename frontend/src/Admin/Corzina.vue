@@ -110,7 +110,6 @@
     </div>
   </div>
 
-  <!-- Modal section -->
 
   <n-modal v-model:show="store.modals.editApeal.show" class="custom-card" preset="card" :style="{ width: '600px' }"
     :title="`${store.modals.editApeal.data.lastname} ${store.modals.editApeal.data.firstname}`" :bordered="true"
@@ -140,7 +139,6 @@ import editapeals from "./Modals/editapeals.vue";
 
 
 let store = Dean();
-// modal
 
 function editmodal(data) {
   store.modals.editApeal.show = true;
@@ -192,7 +190,6 @@ let cancelCallback = function () {
 
 
 
-// *modal
 let page = ref(1);
 let message = useMessage()
 const dialog = useDialog();
@@ -245,6 +242,7 @@ watch(
   (data, old) => {
     if (data) {
       callbackend(page.value);
+      store.modals.editApeal.loading = false;
 
     }
 
