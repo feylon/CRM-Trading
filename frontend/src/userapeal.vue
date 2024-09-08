@@ -18,9 +18,9 @@
                             class="w-full p-3 mt-2  bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:shadow-outline"
                             type="text" placeholder="Familiyangiz" name="lastName" autocomplete="family-name" />
 
-                        <input @keydown="formatPhoneNumber()" required v-model="phone"
+                        <input @input="formatPhoneNumber" required v-model="phone" maxlength="17"
                             class="w-full p-3 mt-2  bg-gray-900 text-blue-400 rounded-lg focus:outline-none focus:shadow-outline"
-                            type="tel" placeholder="Telefon raqamingiz" name="phone" autocomplete="tel" />
+                            type="tel" placeholder="+998 90 123 45 67" name="phone" autocomplete="tel" />
                     </div>
                     <div class="my-4">
                         <textarea required v-model="description" placeholder="Message"
@@ -29,9 +29,9 @@
                     </div>
                     <div class="flex justify-end w-[100%]">
                         <div class="w-1/2 my-2 lg:w-1/4">
-                            <button type="submit"
-                                class="w-full p-3 text-sm font-bold tracking-wide text-gray-100 uppercase bg-gray-800 rounded rounded-xl hover:bg-blue-700 transition-all duration-300-md focus:outline-none focus:shadow-outline">
-                                Yuborish
+                            <button type="submit" :disabled="yuborilmoqda"
+                                class="disabled:opacity-50 w-full p-3 text-sm font-bold tracking-wide text-gray-100 uppercase bg-gray-800 rounded rounded-xl hover:bg-blue-700 transition-all duration-300-md focus:outline-none focus:shadow-outline">
+                                {{ yuborilmoqda ? "Yuborilmoqda..." : "Yuborish" }}
                             </button>
                         </div>
                     </div>
@@ -77,9 +77,12 @@ let firstname = ref('');
 let lastname = ref('');
 let phone = ref('');
 let description = ref('');
+let yuborilmoqda = ref(false);
 
 let submit = async function (obj) {
-
+    let raqam = obj.phone.replace(/\D/g, '');
+    if (raqam.length != 12) return message.warning("Telefon raqamni to'liq kiriting");
+    yuborilmoqda.value = true;
     try {
         let backend = await fetch(`${url}addApeal`, {
             method: "POST",
@@ -97,14 +100,27 @@ let submit = async function (obj) {
             message.success("Siz bilan tez orada bog'lanamiz");
             return;
         }
+        let javob = await backend.json();
+        message.error(javob.error || "Xatolik yuz berdi");
     } catch (error) {
-
+        message.error("Server bilan aloqa yo'q, keyinroq urinib ko'ring");
+    } finally {
+        yuborilmoqda.value = false;
     }
 }
 
 
 
-let  formatPhoneNumber = function (phoneNumber) {
+let  formatPhoneNumber = function () {
+    let r = phone.value.replace(/\D/g, '');
+    if (!r.startsWith('998')) r = '998' + r;
+    r = r.slice(0, 12);
+    let t = '+' + r.slice(0, 3);
+    if (r.length > 3) t += ' ' + r.slice(3, 5);
+    if (r.length > 5) t += ' ' + r.slice(5, 8);
+    if (r.length > 8) t += ' ' + r.slice(8, 10);
+    if (r.length > 10) t += ' ' + r.slice(10, 12);
+    phone.value = t;
   }
 
 </script>

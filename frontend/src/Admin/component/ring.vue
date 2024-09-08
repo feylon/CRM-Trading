@@ -15,14 +15,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import url from "../../../base"
 import { useRouter } from 'vue-router';
 let router = useRouter();
 const audioElement = ref(null);
 
-let delete1 = ref(0);
 let notification = ref(0);
 let notification_list = ref([]);
 
@@ -34,51 +33,39 @@ let changeLang = function (){
     router.push("/")
 }
 let callbackend = async function () {
-
-  
-  
-  if (audioElement.value) {
-    audioElement.value.addEventListener('play', () => {
-    console.log('Audio is playing');
-    
-  });
-  }
-
-
   const token = localStorage.token;
-
-  let backend = await fetch(`${url}notification/status`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        '-x-token': token
+  try {
+    let backend = await fetch(`${url}notification/status`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          '-x-token': token
+        }
       }
+    );
+    if (backend.status == 200) {
+      backend = await backend.json();
+      if (backend.length > notification.value && audioElement.value)
+        audioElement.value.play().catch(() => {});
+
+      notification.value = backend.length;
+      notification_list.value = backend.map(i => ({
+        label: `${i.title} : ${(new Date(i.start_time)).toLocaleString()} - ${(new Date(i.end_time)).toLocaleString()}`,
+        key: `${uuidv4()}`
+      }));
+      if (!backend.length) notification_list.value = [{ label: "Hozircha bildirishnoma yo'q", key: 'bosh', disabled: true }];
     }
-  );
-  if (backend.status == 200) {
-    backend = await backend.json();
-     if(backend.length > 0) audioElement.value.play(); 
-
-
-    notification_list.value = [];
-    backend.forEach(i => {
-    notification.value++;
-
-    notification_list.value.push({ label: `${i.title} : ${(new Date(i.start_time)).toLocaleString()} ${(new Date(i.end_time)).toLocaleString()}`, key: `${uuidv4()}` });
-      
-    });
-
+    if (backend.status == 401) router.push('/login');
+  } catch (error) {
   }
-  if (backend.status == 401) router.push('/login');
 }
 
+let interval;
 onMounted(async () => {
     callbackend();
+    interval = setInterval(callbackend, 60000);
 });
 
-setInterval(() => {
-    callbackend();
-    notification.value = 0;
-}, 60000);
+onUnmounted(() => clearInterval(interval));
 </script>

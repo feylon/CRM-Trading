@@ -25,7 +25,7 @@
 
             <div class="mx-auto max-w-xs">
               <form @submit.prevent="loginfunc" method="post">
-                <n-input type="text" size="large" placeholder="Email" v-model:value="login"
+                <n-input type="text" size="large" placeholder="Login" v-model:value="login"
                   class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" />
 
                 <n-input v-model:value="password"
@@ -88,9 +88,9 @@ const login = ref(null);
 const password = ref(null);
 async function loginfunc() {
 
-  if (!password.value && !password.value)
+  if (!login.value || !password.value)
     return message.warning("Formani to'ldiring")
-  if (password.value.length < 3 && login.value.length < 3)
+  if (password.value.length < 3 || login.value.length < 3)
     return message.warning("3 ta belgidan ko'p bo'lishi lozim")
     disabled.value = true;
 
@@ -111,8 +111,7 @@ async function loginfunc() {
       backend = await backend.json();
       localStorage.setItem('token', backend.token);
       let store = Dean();
-// await store.getProfil();
-(async()=>{await store.getProfil();})()
+      store.getProfil();
 
       router.push("/");
       login.value = '';
@@ -121,13 +120,16 @@ async function loginfunc() {
     }
     else {
       disabled.value = false;
-      message.error("Login yoki parol xato");
+      let javob = {};
+      try { javob = await backend.json(); } catch (e) {}
+      message.error(backend.status == 429 && javob.error ? javob.error : "Login yoki parol xato");
       login.value = '';
       password.value = '';
       return;
     }
   } catch (error) {
-    
+    disabled.value = false;
+    message.error("Server bilan aloqa uzildi");
   }
 
 }

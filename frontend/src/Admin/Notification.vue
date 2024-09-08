@@ -59,7 +59,7 @@
 
 
               <td>
-                <n-switch @click="change_active({ id: i.id, active: i.active })" v-model:value="i.active">
+                <n-switch @update:value="(v) => change_active({ id: i.id, active: v })" v-model:value="i.active">
                   <template #checked>
                     Faol
                   </template>
@@ -98,7 +98,6 @@
   </div>
 
 
-  <!-- Modal -->
 
   <n-modal v-model:show="showModal" preset="dialog" title="O'chirish"
     :content="`''${deleteitemtext}'' element o'chirilsinmi ?`" positive-text="O'chirish" negative-text="Bekor qilish"
@@ -137,8 +136,6 @@ let callbackend = async function () {
   );
   if (backend.status == 200) {
     backend = await backend.json();
-    
-    //   events.value = backend;
     data.value = backend;
 
   }
@@ -161,10 +158,7 @@ async function change_active(obj) {
 
     });
     if (backend.status == 200) {
-      message.success("Ma'lumot o'chirildi");
-      router.go(0)
-
-      // callbackend(page.value);
+      message.success("Holati o'zgartirildi");
       return;
     }
     if (backend.status == 401) {
@@ -175,7 +169,7 @@ async function change_active(obj) {
       message.error(backend.error)
     }
   } catch (error) {
-    
+    message.error("Server bilan aloqa uzildi")
   }
 }
 
@@ -199,8 +193,6 @@ const submitCallback = async function () {
     if (backend.status == 200) {
       message.success("Ma'lumot o'chirildi");
       router.go(0)
-
-      // callbackend(page.value);
       return;
     }
     if (backend.status == 401) {
