@@ -10,7 +10,7 @@
             <n-input v-model:value="formValue.title" placeholder="Title" />
         </n-form-item>
         <n-form-item label="Joylashuv" path="location">
-            <n-input v-model:value="formValue.location" placeholder="Title" />
+            <n-input v-model:value="formValue.location" placeholder="Masalan: Toshkent ofis" />
         </n-form-item>
         <div class="w-[600px]">
             <n-form-item label="Description" path="description">
@@ -21,22 +21,18 @@
             </n-form-item>
         </div>
         <div class="w-[600px]">
-            <!-- <n-form-item label="Tags" path="tags">
-                <n-input type="textarea" :autosize="{
-                    minRows: 3,
-                    maxRows: 5,
-                }" v-model:value="formValue.tags" @keydown.space.prevent="spacekey" placeholder="Teglar" />
-            </n-form-item> -->
             <n-dynamic-tags  v-model:value="formValue.tags" />
 
         </div>
         <n-form-item label="Havola" path="url">
-            <n-input v-model:value="formValue.url" placeholder="Title" />
+            <n-input v-model:value="formValue.url" placeholder="example.com">
+                <template #prefix>https://</template>
+            </n-input>
         </n-form-item>
         <div class="flex justify-end">
             <n-form-item>
-                <n-button @click="handleValidateClick">
-                    Qo'shish
+                <n-button type="primary" :loading="loading" @click="handleValidateClick">
+                    {{ props.item ? "Saqlash" : "Qo'shish" }}
                 </n-button>
             </n-form-item>
         </div>
@@ -44,13 +40,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Dean } from '../../../Pinia';
 import url from "../../../base";
 import { useRouter } from 'vue-router';
 import { useMessage } from 'naive-ui';
 
+const props = defineProps({
+    item: {
+        type: Object,
+        default: null
+    }
+});
+
 let message = useMessage();
+let loading = ref(false);
 const router = useRouter();
 const store = Dean();
 
@@ -89,11 +93,6 @@ const rules = {
         trigger: ["blur", "input"],
         message: "Descriptionni kiriting"
     },
-    // tags: {
-    //     required: false,
-    //     trigger: ["blur", "change"],
-    //     message: "Taglarni kiriting"
-    // },
     location: {
         required: false,
         trigger: ["blur", "change"],
@@ -105,6 +104,20 @@ const rules = {
         message: "Havolani kiriting"
     }
 };
+
+onMounted(() => {
+    if (!props.item) return;
+    let i = props.item;
+    formValue.value = {
+        title: i.title || '',
+        start_time: new Date(i.time.start).getTime(),
+        end_time: new Date(i.time.end).getTime(),
+        description: i.description,
+        tags: i.tags ? i.tags.split(/\s+/).filter(Boolean) : [],
+        location: i.location,
+        url: i.url ? i.url.replace(/^https?:\/\//, '') : null
+    };
+});
 
 const handleValidateClick = async (e) => {
     e.preventDefault();
@@ -118,16 +131,15 @@ const handleValidateClick = async (e) => {
                         data[i] = formValue.value[i];
                     }
                 }
-                if(data.tags) {
-                    // data.tags.forEach((let i, let j)=> {data.tags[j] = data.tags[j].trim()})
-                    
-                    
-                    data.tags = data.tags.join('');
-                }
+                if (data.tags) data.tags = data.tags.map(t => t.trim()).join(' ');
                 if (data.url) data.url = `https://${data.url}`;
-                    
-                
-                let backend = await fetch(`${url}calendar/addcalendar`, {
+                if (props.item) {
+                    ['tags', 'location', 'url'].forEach(k => { if (!data[k]) data[k] = ''; });
+                }
+                loading.value = true;
+
+                let manzil = props.item ? `${url}calendar/edit/${props.item.id}` : `${url}calendar/addcalendar`;
+                let backend = await fetch(manzil, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json; charset=utf-8",
@@ -136,39 +148,32 @@ const handleValidateClick = async (e) => {
                     body: JSON.stringify(data)
                 });
 
-                if (backend.status == 400) {
+                loading.value = false;
+                if (backend.status == 401) return router.push('/login');
+                if (backend.status == 400 || backend.status == 404) {
                     backend = await backend.json();
                     message.error(backend.error);
                     return;
                 }
 
-                if (backend.status == 201) {
-                    backend = await backend.json();
+                if (backend.status == 201 || backend.status == 200) {
                     message.success("Saqlandi");
                     store.modals.addcalendar.show = false;
+                    store.modals.editcalendar.show = false;
                     router.go(0);
                     return;
                 }
 
             } catch (error) {
-                
+                loading.value = false;
+                message.error("Server bilan aloqa uzildi");
             }
         } else {
-            message.error('Invalid');
+            message.error("Formani to'g'ri to'ldiring");
         }
     });
 };
 
-let spacekey = function () {
-    if (formValue.value.tags) {
-        formValue.value.tags = formValue.value.tags.trim();
-        formValue.value.tags = formValue.value.tags
-            .split(' ')
-            .map(word => `#${word}`)
-            .join(' ') + ' ';
-        formValue.value.tags = formValue.value.tags.replace(/#{2,}/g, '#');
-    }
-};
 </script>
 
 <style lang="scss" scoped></style>

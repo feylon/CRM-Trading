@@ -331,7 +331,6 @@
     </div>
   </div>
 
-<!-- modal -->
 <n-modal v-model:show="store.modals.addcalendar.show" 
 class="custom-card"
     preset="card"
@@ -348,12 +347,9 @@ class="custom-card"
 
 >
     <template #header>
-      <div>Qo'shish1</div>
+      <div>Yangi tadbir qo'shish</div>
     </template>
     <addcalendar/>
-    <!-- <template #action>
-      <div>action</div>
-    </template> -->
   </n-modal>
 
 </template>

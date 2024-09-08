@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { useRouter } from "vue-router";
 import url from "../base/index.js";
 
 const Dean = defineStore("counter", {
@@ -14,14 +13,15 @@ const Dean = defineStore("counter", {
       addcalendar: {
         show: false
       },
+      editcalendar: {
+        show: false,
+        data: {},
+      },
     },
     profile: {},
   }),
   getters: {
-    doubleCount: (state) => {
-      state.count * 2;
-      console.log(1);
-    },
+    doubleCount: (state) => state.count * 2,
   },
   actions: {
     increment() {
@@ -38,7 +38,6 @@ const Dean = defineStore("counter", {
       });
 
       if (backend.status == 401) {
-        //  window.location.href = '/dean/login';
         return 401;
       }
       if (backend.status == 200) {
@@ -54,10 +53,7 @@ const Student = defineStore("counter11", {
     count: 1,
   }),
   getters: {
-    doubleCount: (state) => {
-      state.count * 2;
-      console.log(1);
-    },
+    doubleCount: (state) => state.count * 2,
   },
   actions: {
     increment() {

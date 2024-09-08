@@ -30,7 +30,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span><span class="font-medium">Boshlanish vaqti: </span>{{ props.eventDialogData.time.start }}
+                      <span><span class="font-medium">Boshlanish vaqti: </span>{{ new Date(props.eventDialogData.time.start).toLocaleString() }}
                       </span>
                     </h6>
 
@@ -41,7 +41,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span><span class="font-medium">Tugash vaqti: </span>{{ props.eventDialogData.time.end }}
+                      <span><span class="font-medium">Tugash vaqti: </span>{{ new Date(props.eventDialogData.time.end).toLocaleString() }}
                       </span>
                     </h6>
 
@@ -90,8 +90,11 @@
                         </svg>
                         <span>Yopish</span>
                       </button> -->
-                      <n-button type='error' @click="showModal = true; deleteitemtext = props.eventDialogData.title; deleteitem = props.eventDialogData.id" strong>O'chirish</n-button>
-                      <a :href="props.eventDialogData.url"
+                      <div class="flex gap-2">
+                        <n-button type='error' @click="showModal = true; deleteitemtext = props.eventDialogData.title; deleteitem = props.eventDialogData.id" strong>O'chirish</n-button>
+                        <n-button type='info' @click="tahrirla(props.eventDialogData); props.closeEventDialog()" strong>Tahrirlash</n-button>
+                      </div>
+                      <a v-if="props.eventDialogData.url" :href="props.eventDialogData.url"
                         target='_blank'
                         class="bg-green-600 rounded-md py-1 md:py-2 px-5  shadow-md hover:bg-green-700 transition-all">
                         <span class="text-xs md:text-sm font-medium text-white">Linkni o'qish</span>
@@ -107,6 +110,10 @@
     </div>
   </div>
   <div class="h-[500px]"></div>
+  <n-modal v-model:show="store.modals.editcalendar.show" class="custom-card" preset="card" :style="{ width: '600px' }"
+    title="Tadbirni tahrirlash" :bordered="false" size="huge" :segmented="{ content: 'soft', footer: 'soft' }">
+    <addcalendar v-if="store.modals.editcalendar.show" :item="store.modals.editcalendar.data" />
+  </n-modal>
   <n-modal
     v-model:show="showModal"
     preset="dialog"
@@ -124,148 +131,20 @@ import V3EventsCalendar from "./components/V3EventsCalendar.vue";
 import url from "../../../base"
 import { useRouter } from "vue-router";
 import { useMessage } from "naive-ui";
+import { Dean } from "../../../Pinia";
+import addcalendar from "../Modals/addcalendar.vue";
 const message = useMessage();
-// all events data
+const store = Dean();
 const router = useRouter();
+
+let tahrirla = (item) => {
+  store.modals.editcalendar.data = { ...item };
+  store.modals.editcalendar.show = true;
+}
 let showModal = ref(false);
 let deleteitemtext = ref('');
 let deleteitem = ref(null);
 const events = ref(null)
-  // [
-  // {
-  //   id: 1,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 11",
-  //   time: { start: "2024-08-27T12:00", end: "2024-08-29T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-  //   image: "https://i.ytimg.com/vi/D_zVKIC-xes/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AHUBoAC4AOKAgwIABABGHggNyh_MA8=&rs=AOn4CLAaVt5g4iCbB_gWNfVkgqCA6JmnIQ",
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 2,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 2",
-  //   time: { start: "2024-06-11T02:00", end: "2024-06-11T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 3,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 3",
-  //   time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  //   background: "teal",
-  // },
-  // {
-  //   id: 4,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 4",
-  //   time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 5,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 5",
-  //   time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 6,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 6",
-  //   time: { start: "2024-06-11T12:00", end: "2024-06-11T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 7,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 7",
-  //   time: { start: "2024-06-06T12:00", end: "2024-06-06T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 8,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 8",
-  //   time: { start: "2024-06-19T12:00", end: "2024-06-19T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 9,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 9",
-  //   time: { start: "2024-06-19T12:00", end: "2024-06-19T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 10,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 10",
-  //   time: { start: "2024-06-15T12:00", end: "2024-06-15T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 11,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 11",
-  //   time: { start: "2024-06-15T12:00", end: "2024-06-15T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-  // {
-  //   id: 12,
-  //   url: "https://github.com/feylon",
-  //   title: "Dummy Event Name 12",
-  //   time: { start: "2024-06-02T12:00", end: "2024-06-02T14:00" },
-  //   description:
-  //     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores assumenda corporis doloremque et expedita molestias necessitatibus quam quas temporibus veritatis. Deserunt excepturi illum nobis perferendis praesentium repudiandae saepe sapiente voluptatem!",
-    
-  //   tags: "#fun #nightout #dance #veterantime",
-  //   location: "At the base",
-  // },
-// ]);
 
 let callbackend = async function(){
   const token = localStorage.token;
@@ -310,8 +189,6 @@ let deletedata = async function () {
     if (backend.status == 200) {
       message.success("Ma'lumot o'chirildi");
       router.go(0);
-
-      // callbackend(page.value);
       return;
     }
     if (backend.status == 401) {
